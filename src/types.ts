@@ -118,7 +118,7 @@ export interface ScanResultSummary {
 }
 
 /**
- * Final output of `lifeboat scan`: one entry per analyzed dependency plus roll-up counts.
+ * Final output of `graveyard-check scan`: one entry per analyzed dependency plus roll-up counts.
  */
 export interface ScanResult {
   /** ISO 8601 timestamp when the scan completed. */

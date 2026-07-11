@@ -1,5 +1,5 @@
 const GITHUB_API_BASE = 'https://api.github.com';
-const USER_AGENT = 'lifeboat-cli';
+const USER_AGENT = 'graveyard-check-cli';
 
 const DEPRECATION_PATTERN = /deprecated|no longer maintained|unmaintained/i;
 

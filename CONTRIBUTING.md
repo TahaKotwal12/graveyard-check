@@ -1,4 +1,4 @@
-# Contributing to Lifeboat
+# Contributing to Graveyard Check
 
 The most valuable contribution you can make is a **successor record**: a small
 YAML file mapping a dead package to its verified replacement. No TypeScript

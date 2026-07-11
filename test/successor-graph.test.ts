@@ -29,7 +29,7 @@ describe('loadSuccessorGraph', () => {
   });
 
   it('throws an error naming the file for records failing schema validation', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'lifeboat-successors-'));
+    const dir = await mkdtemp(join(tmpdir(), 'graveyard-check-successors-'));
 
     try {
       await writeFile(
@@ -51,7 +51,7 @@ describe('loadSuccessorGraph', () => {
   });
 
   it('throws an error naming the file for unparseable YAML', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'lifeboat-successors-'));
+    const dir = await mkdtemp(join(tmpdir(), 'graveyard-check-successors-'));
 
     try {
       await writeFile(join(dir, 'garbage.yaml'), 'deadPackage: [unclosed');
@@ -65,7 +65,7 @@ describe('loadSuccessorGraph', () => {
   });
 
   it('rejects duplicate records for the same dead package', async () => {
-    const dir = await mkdtemp(join(tmpdir(), 'lifeboat-successors-'));
+    const dir = await mkdtemp(join(tmpdir(), 'graveyard-check-successors-'));
     const record = [
       'deadPackage: dupe',
       'ecosystem: npm',

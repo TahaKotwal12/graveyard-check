@@ -1,7 +1,7 @@
-name: 'Lifeboat'
+name: 'Graveyard Check'
 description: 'Scan dependencies for abandoned packages and get recommended, verified successors'
 branding:
-  icon: 'life-buoy'
+  icon: 'alert'
   color: 'orange'
 
 inputs:
@@ -22,21 +22,21 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Run lifeboat scan
+    - name: Run graveyard-check scan
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
-        # When this action runs from a checkout of the lifeboat repo itself
+        # When this action runs from a checkout of the graveyard-check repo itself
         # (dogfooding), use the locally built CLI; otherwise fetch from npm.
         if [ -f "$GITHUB_ACTION_PATH/dist/cli.js" ]; then
-          node "$GITHUB_ACTION_PATH/dist/cli.js" scan --json > lifeboat-report.json
+          node "$GITHUB_ACTION_PATH/dist/cli.js" scan --json > graveyard-check-report.json
         else
-          npx --yes lifeboat scan --json > lifeboat-report.json
+          npx --yes graveyard-check scan --json > graveyard-check-report.json
         fi
 
     - name: Summarize results and enforce threshold
       shell: bash
       env:
         FAIL_ON: ${{ inputs.fail-on }}
-      run: node "$GITHUB_ACTION_PATH/scripts/action-summary.mjs" lifeboat-report.json
+      run: node "$GITHUB_ACTION_PATH/scripts/action-summary.mjs" graveyard-check-report.json

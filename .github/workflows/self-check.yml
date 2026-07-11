@@ -1,4 +1,4 @@
-# Dogfooding: run lifeboat against its own dependencies weekly, using the
+# Dogfooding: run graveyard-check against its own dependencies weekly, using the
 # action defined in this repository.
 name: Self-check
 
@@ -27,7 +27,7 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
 
-      # lifeboat reads package-lock.json; this repo uses pnpm, so generate an
+      # graveyard-check reads package-lock.json; this repo uses pnpm, so generate an
       # npm lockfile from package.json without touching node_modules.
       - name: Generate npm lockfile for the scan
         run: npm install --package-lock-only --ignore-scripts

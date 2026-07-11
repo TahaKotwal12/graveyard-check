@@ -1,4 +1,4 @@
-// Consumes a `lifeboat scan --json` report inside the GitHub Action:
+// Consumes a `graveyard-check scan --json` report inside the GitHub Action:
 // writes a markdown table to the job summary and exits non-zero when any
 // dependency meets or exceeds the FAIL_ON threshold.
 import { appendFileSync, readFileSync } from 'node:fs';
@@ -32,7 +32,7 @@ const failing = flagged.filter(
 
 const escapeCell = (text) => text.replace(/\|/g, '\\|').replace(/\r?\n/g, ' ');
 
-const lines = ['## Lifeboat dependency scan', ''];
+const lines = ['## Graveyard Check dependency scan', ''];
 
 if (flagged.length === 0) {
   lines.push(`All clear — none of the ${summary.total} scanned dependencies look abandoned.`);

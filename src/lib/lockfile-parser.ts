@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import type { Dependency } from '../types.js';
 
 export const NO_LOCKFILE_ERROR =
-  'No package-lock.json found. Lifeboat currently supports npm projects only — pnpm-lock.yaml and yarn.lock support is planned.';
+  'No package-lock.json found. Graveyard Check currently supports npm projects only — pnpm-lock.yaml and yarn.lock support is planned.';
 
 interface PackageJson {
   dependencies?: Record<string, string>;
@@ -69,7 +69,7 @@ export async function parseLockfile(cwd: string): Promise<Dependency[]> {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       throw new Error(
-        `Found package-lock.json but no package.json in ${cwd}. Run lifeboat from your project root.`,
+        `Found package-lock.json but no package.json in ${cwd}. Run graveyard-check from your project root.`,
       );
     }
     throw error;

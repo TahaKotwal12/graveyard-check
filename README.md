@@ -1,16 +1,16 @@
-# Lifeboat
+# Graveyard Check
 
-[![CI](https://github.com/your-org/lifeboat/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/lifeboat/actions/workflows/ci.yml)
+[![CI](https://github.com/TahaKotwal12/graveyard-check/actions/workflows/ci.yml/badge.svg)](https://github.com/TahaKotwal12/graveyard-check/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Find maintained successors for abandoned dependencies.
 
-Dependabot tells you when there's a new version. Nothing tells you when there will *never* be a new version. Lifeboat reads your lockfile, flags dependencies that are effectively dead — using evidence, not vibes — and recommends the verified community successor to migrate to.
+Dependabot tells you when there's a new version. Nothing tells you when there will *never* be a new version. Graveyard Check reads your lockfile, flags dependencies that are effectively dead — using evidence, not vibes — and recommends the verified community successor to migrate to.
 
 ## Usage
 
 ```bash
-npx lifeboat scan
+npx graveyard-check scan
 ```
 
 ```
@@ -26,7 +26,7 @@ Scanned 142 dependencies: 139 maintained, 1 at risk, 2 likely abandoned
 Check a single package without a project:
 
 ```bash
-npx lifeboat check request
+npx graveyard-check check request
 ```
 
 ```
@@ -53,7 +53,7 @@ Recommended successors:
 
 ### GitHub token (recommended)
 
-Lifeboat queries the GitHub API for repository activity. Unauthenticated requests are limited to 60/hour, which a real scan will exhaust. Set a token (a fine-grained token with read-only public repository access is enough):
+Graveyard Check queries the GitHub API for repository activity. Unauthenticated requests are limited to 60/hour, which a real scan will exhaust. Set a token (a fine-grained token with read-only public repository access is enough):
 
 ```bash
 export GITHUB_TOKEN=ghp_...   # or $env:GITHUB_TOKEN = "ghp_..." in PowerShell
@@ -61,11 +61,11 @@ export GITHUB_TOKEN=ghp_...   # or $env:GITHUB_TOKEN = "ghp_..." in PowerShell
 
 ### GitHub Action
 
-Run Lifeboat weekly in CI and fail the build on abandoned dependencies — see [docs/github-action.md](docs/github-action.md).
+Run Graveyard Check weekly in CI and fail the build on abandoned dependencies — see [docs/github-action.md](docs/github-action.md).
 
 ## How verdicts work
 
-Lifeboat is conservative by design: a false "abandoned" claim is worse than a missed one.
+Graveyard Check is conservative by design: a false "abandoned" claim is worse than a missed one.
 
 - npm's native `deprecated` flag is maintainer-confirmed truth and immediately marks a package **likely-abandoned**.
 - An archived GitHub repository, or 24+ months without commits *and* releases, also means **likely-abandoned**.

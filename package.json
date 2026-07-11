@@ -1,19 +1,27 @@
 {
-  "name": "lifeboat",
-  "version": "0.0.0",
-  "description": "Find maintained successors for abandoned dependencies",
+  "name": "graveyard-check",
+  "version": "0.1.0",
+  "description": "Graveyard Check — find maintained successors for abandoned dependencies",
   "type": "module",
   "bin": {
-    "lifeboat": "./dist/cli.js"
+    "graveyard-check": "./dist/cli.js"
   },
   "files": [
     "dist",
     "data"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TahaKotwal12/graveyard-check.git"
+  },
+  "homepage": "https://github.com/TahaKotwal12/graveyard-check#readme",
+  "bugs": {
+    "url": "https://github.com/TahaKotwal12/graveyard-check/issues"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lifeboat": "node dist/cli.js",
+    "graveyard-check": "node dist/cli.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint .",
@@ -25,6 +33,7 @@
     "npm",
     "dependencies",
     "abandonware",
+    "graveyard-check",
     "cli"
   ],
   "license": "MIT",

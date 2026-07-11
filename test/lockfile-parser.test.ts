@@ -65,7 +65,7 @@ describe('parseLockfile', () => {
   });
 
   it('throws a clear error when package-lock.json is missing', async () => {
-    const emptyDir = await mkdtemp(join(tmpdir(), 'lifeboat-lockfile-'));
+    const emptyDir = await mkdtemp(join(tmpdir(), 'graveyard-check-lockfile-'));
 
     try {
       await expect(parseLockfile(emptyDir)).rejects.toThrow(NO_LOCKFILE_ERROR);
@@ -75,7 +75,7 @@ describe('parseLockfile', () => {
   });
 
   it('rejects legacy lockfiles without a packages key', async () => {
-    const legacyDir = await mkdtemp(join(tmpdir(), 'lifeboat-legacy-lockfile-'));
+    const legacyDir = await mkdtemp(join(tmpdir(), 'graveyard-check-legacy-lockfile-'));
 
     try {
       await writeFile(

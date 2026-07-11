@@ -1,6 +1,6 @@
-# Lifeboat GitHub Action
+# Graveyard Check GitHub Action
 
-Runs `lifeboat scan --json` against your repository, posts a markdown summary
+Runs `graveyard-check scan --json` against your repository, posts a markdown summary
 of flagged dependencies to the job summary, and fails the build when
 dependencies meet a severity threshold.
 
@@ -27,14 +27,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  lifeboat:
+  graveyard-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: your-org/lifeboat@v1
+      - uses: TahaKotwal12/graveyard-check@v1
         with:
           fail-on: likely-abandoned
 ```
@@ -53,14 +53,14 @@ on:
 ## Failing on at-risk dependencies too
 
 ```yaml
-      - uses: your-org/lifeboat@v1
+      - uses: TahaKotwal12/graveyard-check@v1
         with:
           fail-on: at-risk
 ```
 
 ## Notes
 
-- Lifeboat currently reads `package-lock.json` (npm lockfile v2/v3). If your
+- Graveyard Check currently reads `package-lock.json` (npm lockfile v2/v3). If your
   repo uses pnpm or yarn, generate one for the scan without touching
   `node_modules`: `npm install --package-lock-only --ignore-scripts`.
 - The job summary table lists each flagged dependency with its evidence and
