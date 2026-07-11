@@ -210,14 +210,17 @@ export default function App() {
             lockfile, flags dependencies that are effectively dead — with evidence — and recommends
             the verified community successor.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <CopyCommand command="npx graveyard-check scan" />
-            <a
-              href={GITHUB_URL}
-              className="flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-navy-950 transition hover:bg-orange-400"
-            >
-              Star on GitHub <ArrowRight className="h-4 w-4" />
-            </a>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4">
+            <CopyCommand command="npm i graveyard-check" />
+            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <CopyCommand command="graveyard-check scan" />
+              <a
+                href={GITHUB_URL}
+                className="flex items-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-navy-950 transition hover:bg-orange-400"
+              >
+                Star on GitHub <ArrowRight className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
           <div className="mx-auto mt-16 max-w-3xl text-left">
@@ -306,9 +309,12 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-4">
           <SectionHeading
             eyebrow="CLI"
-            title="Two commands, zero setup"
-            sub="Scan a whole project, or ask about a single package from anywhere."
+            title="Install once, scan anywhere"
+            sub="Install globally, then scan a whole project or ask about a single package from anywhere."
           />
+          <div className="mb-10 flex justify-center">
+            <CopyCommand command="npm i graveyard-check" />
+          </div>
           <div className="grid gap-8 lg:grid-cols-2">
             <div>
               <h3 className="mb-3 font-mono text-lg font-semibold text-white">graveyard-check scan</h3>
@@ -507,8 +513,9 @@ export default function App() {
             Your auth library was abandoned in 2022.
           </h2>
           <p className="mt-3 text-lg text-slate-400">Find out in the next 30 seconds.</p>
-          <div className="mt-8 flex justify-center">
-            <CopyCommand command="npx graveyard-check scan" />
+          <div className="mt-8 flex flex-col items-center justify-center gap-3">
+            <CopyCommand command="npm i graveyard-check" />
+            <CopyCommand command="graveyard-check scan" />
           </div>
         </div>
       </section>
