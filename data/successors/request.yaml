@@ -1,0 +1,28 @@
+deadPackage: request
+ecosystem: npm
+deprecatedSince: 2020-02-11
+successors:
+  - name: got
+    repoUrl: https://github.com/sindresorhus/got
+    type: api-compatible-alternative
+    migrationEffort: minor-changes
+    evidence:
+      - Listed in request's maintainer-curated alternatives list (request/request#3143)
+      - 19 stable npm releases in the 12 months to 2026-07-11; latest 15.1.0 published 2026-07-02
+      - Repository active as of July 2026 (last push 2026-07-06)
+    lastVerified: 2026-07-11
+  - name: axios
+    repoUrl: https://github.com/axios/axios
+    type: api-compatible-alternative
+    migrationEffort: minor-changes
+    evidence:
+      - Listed in request's maintainer-curated alternatives list (request/request#3143)
+      - 29 npm releases in the 12 months to 2026-07-11; latest 1.18.1 published 2026-06-22
+      - Repository active as of July 2026 (last push 2026-07-06)
+    lastVerified: 2026-07-11
+notes: >-
+  request was fully deprecated by its maintainers on 2020-02-11; the npm
+  deprecation message points to request/request#3142 for the rationale and
+  request/request#3143 for alternatives. Note that got is ESM-only since v12.
+  For zero-dependency code, Node.js 18+ ships a built-in fetch() (powered by
+  undici) that covers many request use cases.

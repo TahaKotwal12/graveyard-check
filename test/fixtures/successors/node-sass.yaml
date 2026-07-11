@@ -1,0 +1,12 @@
+deadPackage: node-sass
+ecosystem: npm
+deprecatedSince: null
+successors:
+  - name: sass
+    repoUrl: https://github.com/sass/dart-sass
+    type: official-successor
+    migrationEffort: drop-in
+    evidence:
+      - Official replacement endorsed by the Sass team
+    lastVerified: 2026-07-01
+notes: null

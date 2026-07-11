@@ -1,0 +1,21 @@
+deadPackage: tslint
+ecosystem: npm
+deprecatedSince: 2019-02-19
+successors:
+  - name: typescript-eslint
+    repoUrl: https://github.com/typescript-eslint/typescript-eslint
+    type: official-successor
+    migrationEffort: minor-changes
+    evidence:
+      - Palantir's deprecation announcement (2019-02-19) explicitly backed ESLint with typescript-eslint as the path forward; tslint's npm deprecation message points to palantir/tslint#4534
+      - 48 stable npm releases in the 12 months to 2026-07-11; latest 8.63.0 published 2026-07-06
+      - Repository active as of 2026-07-11 (pushed the same day this record was verified)
+      - Official migration tool tslint-to-eslint-config maintained under the typescript-eslint org
+    lastVerified: 2026-07-11
+notes: >-
+  TSLint's deprecation was announced 2019-02-19 and it stopped accepting all
+  PRs on 2020-12-01 (palantir/tslint#4534); the repository is archived and the
+  last release is 6.1.3. As of 2026 this successor framing is still current:
+  typescript-eslint v8 is the standard TypeScript linting stack, now used with
+  ESLint's flat config format (eslint.config.js, default since ESLint v9).
+  Angular projects should migrate via angular-eslint instead.

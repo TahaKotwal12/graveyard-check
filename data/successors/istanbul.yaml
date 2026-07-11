@@ -1,0 +1,27 @@
+deadPackage: istanbul
+ecosystem: npm
+deprecatedSince: null
+successors:
+  - name: nyc
+    repoUrl: https://github.com/istanbuljs/nyc
+    type: official-successor
+    migrationEffort: minor-changes
+    evidence:
+      - 'istanbul''s own npm deprecation message says "This module is no longer maintained, try this instead: npm i nyc"'
+      - Maintained under the istanbuljs org, the continuation of the istanbul project
+      - Latest 18.0.0 published 2026-02-22; repository active as of 2026 (last push 2026-05-17)
+    lastVerified: 2026-07-11
+  - name: c8
+    repoUrl: https://github.com/bcoe/c8
+    type: api-compatible-alternative
+    migrationEffort: minor-changes
+    evidence:
+      - Uses Node.js built-in V8 coverage while outputting istanbul-format reports (per its npm description)
+      - Latest 11.0.0 published 2026-02-22; repository active as of July 2026 (last push 2026-07-08)
+    lastVerified: 2026-07-11
+notes: >-
+  istanbul's npm deprecation message also points to
+  https://istanbul.js.org/integrations for other alternatives. The exact date
+  the npm deprecation flag was set could not be confirmed, so deprecatedSince
+  is null; the last istanbul release was 0.4.5 (August 2016) and the
+  gotwarlost/istanbul repository is archived.

@@ -1,0 +1,27 @@
+deadPackage: gulp-util
+ecosystem: npm
+deprecatedSince: 2017-12-27
+successors:
+  - name: fancy-log
+    repoUrl: https://github.com/gulpjs/fancy-log
+    type: official-successor
+    migrationEffort: minor-changes
+    evidence:
+      - Named as the gutil.log replacement in gulp-util's own npm deprecation guidance and the gulp team's deprecation post
+      - Maintained under the gulpjs org; latest 2.0.0 published 2022-01-07 (small, stable module with no releases since)
+    lastVerified: 2026-07-11
+  - name: plugin-error
+    repoUrl: https://github.com/gulpjs/plugin-error
+    type: official-successor
+    migrationEffort: minor-changes
+    evidence:
+      - Named as the gutil.PluginError replacement in gulp-util's own npm deprecation guidance and the gulp team's deprecation post
+      - Maintained under the gulpjs org; latest 2.0.1 published 2022-12-06 (small, stable module)
+    lastVerified: 2026-07-11
+notes: >-
+  gulp-util was a grab-bag utility deprecated by the gulp team on 2017-12-27
+  (medium.com/gulpjs/gulp-util-ca3b1f9f9ac5). There is no single successor:
+  each API maps to an individual module (gutil.File -> vinyl, gutil.colors ->
+  ansi-colors, gutil.template -> lodash.template, etc.); the full mapping table
+  is in the deprecation post and the archived gulpjs/gulp-util README. The two
+  successors listed cover the most common uses (logging and plugin errors).

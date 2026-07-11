@@ -1,0 +1,13 @@
+deadPackage: request
+ecosystem: npm
+deprecatedSince: 2020-02-11
+successors:
+  - name: got
+    repoUrl: https://github.com/sindresorhus/got
+    type: api-compatible-alternative
+    migrationEffort: minor-changes
+    evidence:
+      - Recommended in request's own deprecation issue (request/request#3143)
+      - Actively maintained with regular releases
+    lastVerified: 2026-07-01
+notes: Deprecated by the maintainer in February 2020.

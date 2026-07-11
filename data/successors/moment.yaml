@@ -1,0 +1,39 @@
+deadPackage: moment
+ecosystem: npm
+deprecatedSince: null
+successors:
+  - name: luxon
+    repoUrl: https://github.com/moment/luxon
+    type: official-successor
+    migrationEffort: rewrite-required
+    evidence:
+      - Hosted under the moment GitHub org and described in Moment's own project-status docs as "the evolution of Moment", authored by long-time Moment contributor Isaac Cambron
+      - Latest 3.7.2 published 2025-09-05; one stable release in the 12 months to 2026-07-11 (mature, low churn)
+      - Repository active as of 2026 (last push 2026-04-28)
+    lastVerified: 2026-07-11
+  - name: dayjs
+    repoUrl: https://github.com/iamkun/dayjs
+    type: api-compatible-alternative
+    migrationEffort: minor-changes
+    evidence:
+      - Recommended in Moment's own project-status docs as a minimalist replacement with a Moment-like API (explicitly "not a drop-in replacement")
+      - 8 stable npm releases in the 12 months to 2026-07-11; latest 1.11.21 published 2026-05-26
+      - Repository active as of July 2026 (last push 2026-06-30)
+    lastVerified: 2026-07-11
+  - name: date-fns
+    repoUrl: https://github.com/date-fns/date-fns
+    type: different-approach
+    migrationEffort: rewrite-required
+    evidence:
+      - Recommended in Moment's own project-status docs; functional per-import API, tree-shakeable
+      - 4 stable npm releases in the 12 months to 2026-07-11; latest 4.4.0 published 2026-05-29
+      - Repository active as of 2026 (last push 2026-06-08)
+    lastVerified: 2026-07-11
+notes: >-
+  moment is not deprecated on npm (no deprecated flag as of 2026-07-11) but its
+  README and docs declare it "a legacy project, now in maintenance mode" and
+  recommend choosing a different library; last release is 2.30.1 (December
+  2023). Also consider the ECMAScript Temporal API, which reached TC39 Stage 4
+  in March 2026 and ships natively in Chrome 144+ and Firefox 139+ — the
+  long-term direction for new code, currently still needing a polyfill for
+  Safari.

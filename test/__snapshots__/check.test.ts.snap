@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`performCheck > returns a likely-abandoned verdict with successors for a deprecated package 1`] = `
+"request 2.88.2
+Status: likely-abandoned
+  - Package deprecated on npm: request has been deprecated
+
+Recommended successors:
+  got             api-compatible-alternative   minor-changes
+    - Most widely adopted replacement
+    - Actively maintained
+  axios           api-compatible-alternative   minor-changes
+    - Promise-based, widest ecosystem adoption
+
+Notes: request was deprecated by its maintainers in February 2020."
+`;
+
+exports[`performCheck > returns a maintained verdict with exit code 0 for a healthy package 1`] = `
+"healthy-pkg 2.88.2
+Status: maintained
+  No abandonment signals detected."
+`;

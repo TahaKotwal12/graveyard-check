@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`performScan > filters to likely-abandoned only with severity 1`] = `
+"1 of 5 dependencies look abandoned:
+
+  prettier           Package deprecated on npm: prettier is deprecated, use prettier-next instead
+    -> successor: prettier-next (official successor, drop-in)
+
+Scanned 5 dependencies: 2 maintained, 1 at risk, 1 likely abandoned"
+`;
+
+exports[`performScan > formats the default report 1`] = `
+"2 of 5 dependencies look abandoned or at risk:
+
+  prettier           Package deprecated on npm: prettier is deprecated, use prettier-next instead
+    -> successor: prettier-next (official successor, drop-in)
+  supports-color     No commits in 1.5 years, No release in 1.5 years
+
+Scanned 5 dependencies: 2 maintained, 1 at risk, 1 likely abandoned"
+`;
+
+exports[`performScan > formats the verbose report including the insufficient-data count 1`] = `
+"2 of 5 dependencies look abandoned or at risk:
+
+  prettier           Package deprecated on npm: prettier is deprecated, use prettier-next instead
+    -> successor: prettier-next (official successor, drop-in)
+  supports-color     No commits in 1.5 years, No release in 1.5 years
+
+1 package had insufficient GitHub data to assess
+
+Scanned 5 dependencies: 2 maintained, 1 at risk, 1 likely abandoned"
+`;
+
+exports[`performScan > prints an encouraging line when nothing is abandoned 1`] = `
+"All clear — none of the 5 scanned dependencies look abandoned.
+
+Scanned 5 dependencies: 5 maintained, 0 at risk, 0 likely abandoned"
+`;

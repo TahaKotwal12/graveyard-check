@@ -1,0 +1,38 @@
+# Dogfooding: run lifeboat against its own dependencies weekly, using the
+# action defined in this repository.
+name: Self-check
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  scan-own-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Build the CLI so the local action can use it
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      # lifeboat reads package-lock.json; this repo uses pnpm, so generate an
+      # npm lockfile from package.json without touching node_modules.
+      - name: Generate npm lockfile for the scan
+        run: npm install --package-lock-only --ignore-scripts
+
+      - name: Scan own dependencies
+        uses: ./
+        with:
+          fail-on: likely-abandoned

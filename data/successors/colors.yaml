@@ -1,0 +1,21 @@
+deadPackage: colors
+ecosystem: npm
+deprecatedSince: null
+successors:
+  - name: "@colors/colors"
+    repoUrl: https://github.com/DABH/colors.js
+    type: community-fork
+    migrationEffort: drop-in
+    evidence:
+      - Declared the official continuation in the final status update on the original repo (Marak/colors.js#340), resolved with npm's involvement after the January 2022 sabotage incident
+      - Same API as colors; migration is a package-name change
+      - Latest 1.6.0 published 2023-07-10; no releases in the 12 months to 2026-07-11 (stable, low activity); repository last pushed 2024-11-18
+    lastVerified: 2026-07-11
+notes: >-
+  In January 2022 the original maintainer published sabotaged versions (1.4.1,
+  1.4.2) containing an infinite loop; npm removed them and colors@1.4.0 remains
+  the frozen latest version, with no npm deprecated flag set as of 2026-07-11.
+  Development formally moved to @colors/colors per Marak/colors.js#340
+  (February 2022), and that remains the de-facto fork as of July 2026, though
+  it is itself low-activity. For new code not needing the colors API, actively
+  maintained alternatives like picocolors or chalk are commonly used instead.

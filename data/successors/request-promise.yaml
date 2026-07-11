@@ -1,0 +1,28 @@
+deadPackage: request-promise
+ecosystem: npm
+deprecatedSince: 2020-02-11
+successors:
+  - name: got
+    repoUrl: https://github.com/sindresorhus/got
+    type: api-compatible-alternative
+    migrationEffort: minor-changes
+    evidence:
+      - Promise-based by default, covering request-promise's main reason to exist
+      - 19 stable npm releases in the 12 months to 2026-07-11; latest 15.1.0 published 2026-07-02
+      - Repository active as of July 2026 (last push 2026-07-06)
+    lastVerified: 2026-07-11
+  - name: axios
+    repoUrl: https://github.com/axios/axios
+    type: api-compatible-alternative
+    migrationEffort: minor-changes
+    evidence:
+      - Promise-based by default, covering request-promise's main reason to exist
+      - 29 npm releases in the 12 months to 2026-07-11; latest 1.18.1 published 2026-06-22
+      - Repository active as of July 2026 (last push 2026-07-06)
+    lastVerified: 2026-07-11
+notes: >-
+  request-promise is a thin promise wrapper over request and was deprecated
+  alongside it; its npm deprecation message says it "extends the now deprecated
+  request package" and points to request/request#3142. Any maintained
+  promise-based HTTP client is a candidate replacement, including Node.js 18+
+  built-in fetch().

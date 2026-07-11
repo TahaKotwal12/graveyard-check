@@ -1,0 +1,21 @@
+deadPackage: faker
+ecosystem: npm
+deprecatedSince: null
+successors:
+  - name: "@faker-js/faker"
+    repoUrl: https://github.com/faker-js/faker
+    type: community-fork
+    migrationEffort: minor-changes
+    evidence:
+      - Community continuation formed after the January 2022 sabotage incident; confirmed still active as of July 2026
+      - 6 stable npm releases in the 12 months to 2026-07-11; latest 10.5.0 published 2026-06-17
+      - Repository active as of 2026-07-11 (pushed the same day this record was verified)
+    lastVerified: 2026-07-11
+notes: >-
+  In January 2022 the original maintainer published faker 6.6.6 (2022-01-05), a
+  sabotaged release with no functionality, and the original Marak/faker.js
+  GitHub repository has since been deleted (returns 404). The npm package still
+  lists 6.6.6 as latest with no deprecated flag as of 2026-07-11 — the
+  abandoned package actively breaks installs that pick up latest. The API has
+  evolved since faker v5, so migration usually needs the import change plus
+  method renames; see the @faker-js/faker migration guides.
