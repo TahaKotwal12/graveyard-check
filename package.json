@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/TahaKotwal12/graveyard-check.git"
+    "url": "git+https://github.com/TahaKotwal12/graveyard-check.git"
   },
   "homepage": "https://github.com/TahaKotwal12/graveyard-check#readme",
   "bugs": {
