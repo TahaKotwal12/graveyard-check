@@ -1,0 +1,44 @@
+name: Bug report
+description: Report something broken in the CLI, action, or dataset validation
+title: "[bug] "
+labels: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `graveyard-check scan` in ...
+        2. See error ...
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Graveyard Check version
+      placeholder: 0.1.0
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other

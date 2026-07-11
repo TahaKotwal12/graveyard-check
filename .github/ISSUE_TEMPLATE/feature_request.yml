@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest a new CLI feature, lockfile support, or improvement
+title: "[enhancement] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What pain point does this solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional — other approaches you thought about
+
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Area
+      options:
+        - label: CLI (`scan` / `check`)
+        - label: Lockfile parsing
+        - label: GitHub Action
+        - label: Successor dataset
+        - label: Website / docs

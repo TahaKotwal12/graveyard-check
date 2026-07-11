@@ -1,0 +1,48 @@
+name: Successor record
+description: Propose a new abandoned-package → successor mapping for the dataset
+title: "[dataset] Add successor record: "
+labels: ["dataset"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping grow the successor dataset! See [SCHEMA.md](https://github.com/TahaKotwal12/graveyard-check/blob/main/data/successors/SCHEMA.md) and [CONTRIBUTING.md](https://github.com/TahaKotwal12/graveyard-check/blob/main/CONTRIBUTING.md) for the evidence bar.
+
+  - type: input
+    id: dead-package
+    attributes:
+      label: Abandoned package name
+      description: Exact npm registry name (e.g. `request`, `@scope/name`)
+      placeholder: request
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-abandoned
+    attributes:
+      label: Why is this package abandoned?
+      description: Link to deprecation notice, archived repo, or maintainer statement
+    validations:
+      required: true
+
+  - type: textarea
+    id: successors
+    attributes:
+      label: Proposed successors
+      description: |
+        List each successor with evidence. Example:
+        - got — api-compatible-alternative — minor-changes — link to request#3143
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before you open a PR
+      options:
+        - label: I have read SCHEMA.md and CONTRIBUTING.md
+          required: true
+        - label: Every evidence claim has a verifiable link
+          required: true
+        - label: I will include a `lastVerified` date in the YAML record
+          required: true
