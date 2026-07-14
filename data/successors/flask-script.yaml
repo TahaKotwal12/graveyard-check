@@ -1,0 +1,19 @@
+deadPackage: flask-script
+ecosystem: pypi
+# The README deprecation notice is undated; null per schema rules.
+deprecatedSince: null
+successors:
+  - name: Flask
+    repoUrl: https://github.com/pallets/flask
+    type: official-successor
+    migrationEffort: minor-changes
+    evidence:
+      - "Flask-Script's own README opens with \"Deprecated\" and says: \"As of Flask 0.11, Flask includes a built-in CLI tool, and that may fit your needs better\" — the successor is endorsed by the dead package itself"
+      - Flask-Script's GitHub repository (smurfix/flask-script) is archived; last release 2.0.6 uploaded 2017-09-06
+      - Flask remains actively maintained — latest 3.1.3 uploaded 2026-02-19, repository active as of 2026-06-10
+    lastVerified: 2026-07-14
+notes: >-
+  The replacement is Flask's built-in flask.cli (click-based @app.cli.command
+  decorators and the `flask` command), not a separate package — you migrate by
+  deleting the Flask-Script dependency and porting Manager commands to
+  flask.cli commands. Docs: flask.palletsprojects.com/en/stable/cli/.

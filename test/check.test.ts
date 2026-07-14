@@ -8,6 +8,7 @@ import {
 } from '../src/commands/check.js';
 import type { GitHubRepoActivity } from '../src/lib/github-client.js';
 import type { NpmPackageMetadata } from '../src/lib/npm-registry-client.js';
+import type { PypiPackageMetadata } from '../src/lib/pypi-registry-client.js';
 import type { SuccessorRecord } from '../src/types.js';
 
 const AS_OF = new Date('2026-07-11T12:00:00.000Z');
@@ -24,6 +25,20 @@ function npmMeta(name: string, overrides: Partial<NpmPackageMetadata> = {}): Npm
     deprecated: null,
     repositoryUrl: `https://github.com/acme/${name}`,
     ownerRepo: `acme/${name}`,
+    ...overrides,
+  };
+}
+
+function pypiMeta(name: string, overrides: Partial<PypiPackageMetadata> = {}): PypiPackageMetadata {
+  return {
+    name,
+    latestVersion: '2.32.4',
+    lastModified: monthsAgo(1),
+    deprecated: null,
+    explicitDeprecationSignal: false,
+    repositoryUrl: `https://github.com/psf/${name}`,
+    ownerRepo: `psf/${name}`,
+    classifiers: [],
     ...overrides,
   };
 }
@@ -107,6 +122,23 @@ describe('performCheck', () => {
     expect(result.successorRecord).toBeNull();
     expect(checkExitCode(result.verdict)).toBe(0);
     expect(formatCheckReport(result)).toMatchSnapshot();
+  });
+
+  it('routes an explicitly selected PyPI package to the PyPI registry client', async () => {
+    const clients = createClients({
+      getPackageMetadata: vi.fn(async () => {
+        throw new Error('npm client should not be called for an explicit PyPI check');
+      }),
+      getPypiPackageMetadata: vi.fn(async (name: string) => pypiMeta(name)),
+    });
+
+    const result = await performCheck('requests', clients, 'pypi');
+
+    expect(clients.getPackageMetadata).not.toHaveBeenCalled();
+    expect(clients.getPypiPackageMetadata).toHaveBeenCalledWith('requests');
+    expect(result.verdict.dependency.ecosystem).toBe('pypi');
+    expect(result.verdict.confidence).toBe('maintained');
+    expect(result.successorRecord).toBeNull();
   });
 
   it('returns exit code 0 for insufficient-data verdicts', async () => {

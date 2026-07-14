@@ -4,11 +4,27 @@ import type {
   Dependency,
 } from '../types.js';
 
-export interface NpmMetadata {
+/**
+ * Ecosystem-agnostic registry metadata consumed by the detector.
+ *
+ * `explicitDeprecationSignal` unifies each registry's maintainer-declared
+ * deprecation: npm sets it from the native `deprecated` field, PyPI from the
+ * "Development Status :: 7 - Inactive" trove classifier. Both carry equal
+ * weight — each is a deliberate maintainer declaration. When the field is
+ * omitted it is derived from `deprecated` being non-null, so existing npm
+ * callers keep working unchanged.
+ */
+export interface RegistryMetadata {
+  /** Human-readable deprecation message or classifier, if any. */
   deprecated: string | null;
+  /** Maintainer-declared deprecation, regardless of how the registry expresses it. */
+  explicitDeprecationSignal?: boolean;
   lastModified: Date;
   ownerRepo: string | null;
 }
+
+/** @deprecated Use {@link RegistryMetadata}; kept as an alias for npm-path callers. */
+export type NpmMetadata = RegistryMetadata;
 
 export interface GitHubData {
   lastCommitDate: Date;
@@ -23,27 +39,20 @@ const MONTHS_MS = 1000 * 60 * 60 * 24 * 30.4375;
 
 export function detectAbandonment(
   dep: Dependency,
-  npmMeta: NpmMetadata,
+  meta: RegistryMetadata,
   ghData: GitHubData | null,
 ): AbandonmentVerdict {
   const asOf = new Date();
-  if (npmMeta.deprecated) {
-    return buildDeprecatedVerdict(dep, npmMeta, ghData, asOf);
+  const explicitlyDeprecated = meta.explicitDeprecationSignal ?? meta.deprecated !== null;
+  if (explicitlyDeprecated) {
+    return buildDeprecatedVerdict(dep, meta, ghData, asOf);
   }
 
   if (!ghData) {
     return {
       dependency: dep,
       confidence: 'insufficient-data',
-      signals: [
-        {
-          type: 'maintainer-inactive',
-          severity: 'warning',
-          description: npmMeta.ownerRepo
-            ? `GitHub repository ${npmMeta.ownerRepo} could not be found or accessed`
-            : 'No GitHub repository URL is listed for this package',
-        },
-      ],
+      signals: [buildNoGitHubDataSignal(dep, meta)],
       lastChecked: asOf.toISOString(),
     };
   }
@@ -60,7 +69,7 @@ export function detectAbandonment(
     confidence = 'likely-abandoned';
   } else {
     const commitMonths = monthsBetween(ghData.lastCommitDate, asOf);
-    const releaseMonths = monthsBetween(ghData.lastReleaseDate ?? npmMeta.lastModified, asOf);
+    const releaseMonths = monthsBetween(ghData.lastReleaseDate ?? meta.lastModified, asOf);
 
     if (commitMonths >= 24 && releaseMonths >= 24) {
       signals.push({
@@ -112,9 +121,33 @@ export function detectAbandonment(
   };
 }
 
+/**
+ * Older PyPI packages frequently list no GitHub repository at all (many predate
+ * GitHub), so that case gets an explicit `no-github-link` signal instead of
+ * being silently skipped or scored as maintained.
+ */
+function buildNoGitHubDataSignal(dep: Dependency, meta: RegistryMetadata): AbandonmentSignal {
+  if (dep.ecosystem === 'pypi' && !meta.ownerRepo) {
+    return {
+      type: 'no-github-link',
+      severity: 'warning',
+      description:
+        'No GitHub repository could be resolved from PyPI metadata; activity cannot be assessed',
+    };
+  }
+
+  return {
+    type: 'maintainer-inactive',
+    severity: 'warning',
+    description: meta.ownerRepo
+      ? `GitHub repository ${meta.ownerRepo} could not be found or accessed`
+      : 'No GitHub repository URL is listed for this package',
+  };
+}
+
 function buildDeprecatedVerdict(
   dep: Dependency,
-  npmMeta: NpmMetadata,
+  meta: RegistryMetadata,
   ghData: GitHubData | null,
   asOf: Date,
 ): AbandonmentVerdict {
@@ -122,7 +155,10 @@ function buildDeprecatedVerdict(
     {
       type: 'deprecated-flag',
       severity: 'critical',
-      description: `Package deprecated on npm: ${npmMeta.deprecated}`,
+      description:
+        dep.ecosystem === 'pypi'
+          ? `Package marked inactive on PyPI: ${meta.deprecated}`
+          : `Package deprecated on npm: ${meta.deprecated}`,
     },
   ];
 

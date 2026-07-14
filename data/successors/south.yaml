@@ -1,0 +1,23 @@
+deadPackage: south
+ecosystem: pypi
+# South was superseded rather than formally deprecated on a specific date;
+# Django 1.7 with built-in migrations shipped 2014-09-02.
+deprecatedSince: null
+successors:
+  - name: Django
+    repoUrl: https://github.com/django/django
+    type: official-successor
+    migrationEffort: minor-changes
+    evidence:
+      - Django 1.7 (released 2014-09-02) added built-in schema migrations, and its release notes link an official "Upgrading from South" guide (django.readthedocs.io/en/1.7.x/topics/migrations.html#upgrading-from-south)
+      - Django's built-in migrations were designed by Andrew Godwin, South's own author, making this the designed-in replacement rather than a competitor
+      - South's last release is 1.0.2, uploaded 2014-12-23; the GitHub mirror (andrewgodwin/south) is archived and describes itself as an "Archival copy of the South migration framework for Django 1.x"
+      - Django remains one of the most actively maintained Python projects — 36 releases in the 12 months to 2026-07-14, latest 6.0.7 uploaded 2026-07-07
+    lastVerified: 2026-07-14
+notes: >-
+  The successor is Django's built-in django.db.migrations framework, present
+  in every supported Django version since 1.7 — removing South and running
+  makemigrations/migrate --fake is the documented upgrade path. South
+  migration files cannot be reused directly; Django regenerates them. Any
+  project still pinning South is necessarily also pinning Django <=1.6, which
+  has been end-of-life for over a decade.

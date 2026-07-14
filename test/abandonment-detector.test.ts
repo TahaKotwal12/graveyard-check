@@ -13,6 +13,7 @@ const baseDependency: Dependency = {
   currentVersion: '1.0.0',
   isDirect: true,
   isDev: false,
+  ecosystem: 'npm',
 };
 
 function monthsAgo(months: number, from: Date = AS_OF): Date {
@@ -330,5 +331,81 @@ describe('detectAbandonment', () => {
     expect(verdict.confidence).toBe('maintained');
     expect(verdict.signals).toEqual([]);
     expect(verdict.lastChecked).toBe(AS_OF.toISOString());
+  });
+});
+
+describe('detectAbandonment for PyPI packages', () => {
+  const pypiDependency: Dependency = {
+    name: 'example-py-pkg',
+    currentVersion: '1.0.0',
+    isDirect: true,
+    isDev: false,
+    ecosystem: 'pypi',
+  };
+
+  const INACTIVE_CLASSIFIER = 'Development Status :: 7 - Inactive';
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(AS_OF);
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('treats the inactive classifier identically to npm deprecation, skipping time heuristics', () => {
+    const verdict = detectAbandonment(
+      pypiDependency,
+      npmMeta({
+        deprecated: INACTIVE_CLASSIFIER,
+        explicitDeprecationSignal: true,
+      }),
+      ghData({
+        lastCommitDate: monthsAgo(1),
+        lastReleaseDate: monthsAgo(1),
+      }),
+    );
+
+    expect(verdict.confidence).toBe('likely-abandoned');
+    expect(verdict.signals).toEqual([
+      {
+        type: 'deprecated-flag',
+        severity: 'critical',
+        description: `Package marked inactive on PyPI: ${INACTIVE_CLASSIFIER}`,
+      },
+    ]);
+  });
+
+  it('returns insufficient-data with a no-github-link signal when PyPI metadata has no GitHub repo', () => {
+    const verdict = detectAbandonment(
+      pypiDependency,
+      npmMeta({ ownerRepo: null, lastModified: monthsAgo(120) }),
+      null,
+    );
+
+    expect(verdict.confidence).toBe('insufficient-data');
+    expect(verdict.signals).toEqual([
+      {
+        type: 'no-github-link',
+        severity: 'warning',
+        description:
+          'No GitHub repository could be resolved from PyPI metadata; activity cannot be assessed',
+      },
+    ]);
+  });
+
+  it('trusts recent GitHub activity over PyPI upload staleness', () => {
+    const verdict = detectAbandonment(
+      pypiDependency,
+      npmMeta({ lastModified: monthsAgo(60) }),
+      ghData({
+        lastCommitDate: monthsAgo(2),
+        lastReleaseDate: monthsAgo(3),
+      }),
+    );
+
+    expect(verdict.confidence).toBe('maintained');
+    expect(verdict.signals).toEqual([]);
   });
 });

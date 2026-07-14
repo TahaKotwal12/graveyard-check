@@ -1,0 +1,32 @@
+deadPackage: pycrypto
+ecosystem: pypi
+# pycrypto.org declares the project unmaintained but publishes no dated
+# deprecation announcement, so this stays null.
+deprecatedSince: null
+successors:
+  - name: pycryptodome
+    repoUrl: https://github.com/Legrandin/pycryptodome
+    type: community-fork
+    migrationEffort: drop-in
+    evidence:
+      - "pycrypto.org itself says: \"PyCrypto 2.x is unmaintained, obsolete, and contains security vulnerabilities\" and lists PyCryptodome as \"Recommended for existing software that depends on PyCrypto. Fork of PyCrypto. Most applications should run unmodified.\""
+      - pycryptodome installs into the same `Crypto` package as an almost drop-in replacement (per its own README); a small set of insecure APIs were removed
+      - Latest pycryptodome release 3.23.0 uploaded 2025-05-17; repository active as of 2026-03-29 (not archived)
+    lastVerified: 2026-07-14
+  - name: cryptography
+    repoUrl: https://github.com/pyca/cryptography
+    type: different-approach
+    migrationEffort: rewrite-required
+    evidence:
+      - pycrypto.org lists cryptography as "Recommended for new applications. Newer API with fewer gotchas."
+      - 14 releases in the 12 months to 2026-07-14; latest 49.0.0 uploaded 2026-06-12
+      - Repository active as of 2026-07-14 (last push same day)
+    lastVerified: 2026-07-14
+notes: >-
+  pycrypto's last release is 2.6.1 (last file uploaded 2014-06-20) and its
+  GitHub repository is archived. It carries known CVEs including
+  CVE-2013-7459, a heap-based buffer overflow allowing remote code execution
+  (nvd.nist.gov/vuln/detail/CVE-2013-7459). pycryptodome is the path of least
+  resistance for existing code; cryptography (PyCA) is the recommendation for
+  new code. Do not install pycrypto and pycryptodome side by side — both
+  occupy the `Crypto` namespace (use pycryptodomex to coexist).

@@ -1,0 +1,22 @@
+deadPackage: mock
+ecosystem: pypi
+# mock is not deprecated — see notes; this record documents the stdlib
+# successor path rather than an abandonment.
+deprecatedSince: null
+successors:
+  - name: unittest.mock
+    repoUrl: https://github.com/python/cpython
+    type: official-successor
+    migrationEffort: drop-in
+    evidence:
+      - "mock's own README states: \"mock is now part of the Python standard library, available as unittest.mock in Python 3.3 onwards\" and describes the PyPI package as \"a rolling backport of the standard library mock code\""
+      - The stdlib module is the same code, maintained in CPython; migration is changing `import mock` to `from unittest import mock`
+      - Ships with every supported Python version — no dependency to install, pin, or audit
+    lastVerified: 2026-07-14
+notes: >-
+  Unusual case — the standalone mock package is NOT abandoned: it remains a
+  maintained rolling backport (latest 5.2.0 uploaded 2025-03-03, repository
+  push the same day). It exists so older Python versions can get the newest
+  mock features early. But for code running on any supported Python 3, the
+  dependency is redundant: unittest.mock in the standard library is the same
+  code, so most projects can simply drop the requirement.

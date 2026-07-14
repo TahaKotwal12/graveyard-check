@@ -6,6 +6,7 @@ export interface Dependency {
   currentVersion: string;
   isDirect: boolean;
   isDev: boolean;
+  ecosystem: 'npm' | 'pypi';
 }
 
 /**
@@ -17,6 +18,8 @@ export interface Dependency {
  * - `deprecated-flag` — the package or repository carries an explicit deprecation notice.
  * - `unanswered-issues` — open issues or PRs go unanswered for a long time.
  * - `maintainer-inactive` — listed maintainers show no activity on this or related projects.
+ * - `no-github-link` — no GitHub repository could be resolved from registry metadata at all
+ *   (common for older PyPI packages); analysis cannot proceed, so the verdict is insufficient-data.
  *
  * Severity levels (how loudly to surface the signal):
  * - `info` — worth noting; on its own it does not imply abandonment (e.g. slow release cadence).
@@ -29,7 +32,8 @@ export interface AbandonmentSignal {
     | 'no-commits'
     | 'deprecated-flag'
     | 'unanswered-issues'
-    | 'maintainer-inactive';
+    | 'maintainer-inactive'
+    | 'no-github-link';
   description: string;
   severity: 'info' | 'warning' | 'critical';
 }

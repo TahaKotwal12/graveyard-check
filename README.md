@@ -5,7 +5,19 @@
 
 Find maintained successors for abandoned dependencies.
 
-Dependabot tells you when there's a new version. Nothing tells you when there will *never* be a new version. Graveyard Check reads your lockfile, flags dependencies that are effectively dead — using evidence, not vibes — and recommends the verified community successor to migrate to.
+Dependabot tells you when there's a new version. Nothing tells you when there will _never_ be a new version. Graveyard Check reads your dependency files, flags dependencies that are effectively dead — using evidence, not vibes — and recommends the verified community successor to migrate to.
+
+## Supported ecosystems
+
+| Ecosystem   | Input                     | Status           |
+| ----------- | ------------------------- | ---------------- |
+| npm         | `package-lock.json` v2/v3 | ✅ Supported     |
+| PyPI        | `requirements.txt`        | ✅ New in v0.2.0 |
+| Go modules  | `go.mod`                  | Planned          |
+| Rust crates | `Cargo.lock`              | Planned          |
+
+`poetry.lock` and `Pipfile.lock` are detected but not parsed yet. pnpm and Yarn
+lockfiles are also planned.
 
 ## Usage
 
@@ -29,6 +41,13 @@ Check a single package without a project:
 npx graveyard-check check request
 ```
 
+Package names can exist in more than one registry, so `check` defaults to npm
+and never guesses. Select PyPI explicitly:
+
+```bash
+npx graveyard-check check requests --ecosystem pypi
+```
+
 ```
 request 2.88.2
 Status: likely-abandoned
@@ -44,12 +63,25 @@ Recommended successors:
 
 ### Flags
 
-| Flag | Command | Description |
-| --- | --- | --- |
-| `--json` | `scan` | Output the raw scan result as JSON for CI/scripting |
-| `--direct-only` | `scan` | Skip transitive dependencies (much faster) |
-| `--severity <level>` | `scan` | Only show `at-risk` or `likely-abandoned` findings |
-| `--verbose` | `scan` | Include the count of packages with insufficient data |
+| Flag                      | Command | Description                                                |
+| ------------------------- | ------- | ---------------------------------------------------------- |
+| `--json`                  | `scan`  | Output the raw scan result as JSON for CI/scripting        |
+| `--ecosystem <npm\|pypi>` | `scan`  | Select an ecosystem; otherwise auto-detect, preferring npm |
+| `--direct-only`           | `scan`  | Skip transitive dependencies (much faster)                 |
+| `--severity <level>`      | `scan`  | Only show `at-risk` or `likely-abandoned` findings         |
+| `--verbose`               | `scan`  | Include the count of packages with insufficient data       |
+| `--ecosystem <npm\|pypi>` | `check` | Registry containing the package (default: `npm`)           |
+
+When a project contains both `package-lock.json` and `requirements.txt`, npm is
+scanned by default. Run a second scan with `--ecosystem pypi` for Python:
+
+```bash
+npx graveyard-check scan
+npx graveyard-check scan --ecosystem pypi
+```
+
+JSON output includes `ecosystem` on every dependency so reports from the two
+scans can be combined safely in CI. Terminal output stays intentionally compact.
 
 ### GitHub token (recommended)
 
@@ -68,7 +100,8 @@ Run Graveyard Check weekly in CI and fail the build on abandoned dependencies �
 Graveyard Check is conservative by design: a false "abandoned" claim is worse than a missed one.
 
 - npm's native `deprecated` flag is maintainer-confirmed truth and immediately marks a package **likely-abandoned**.
-- An archived GitHub repository, or 24+ months without commits *and* releases, also means **likely-abandoned**.
+- PyPI's `Development Status :: 7 - Inactive` classifier carries the same weight: it is also an explicit maintainer declaration.
+- An archived GitHub repository, or 24+ months without commits _and_ releases, also means **likely-abandoned**.
 - 12–24 months of staleness means **at-risk**.
 - If the repository can't be found, the verdict is **insufficient-data** — never a guess.
 
@@ -80,9 +113,9 @@ Recommendations come from a public, reviewable dataset of YAML records in [`data
 
 **This is the easiest and most valuable way to contribute.** Know the de-facto successor of a dead package? Add a record: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [record schema](data/successors/SCHEMA.md).
 
-## Ecosystem support
+## Other JavaScript package managers
 
-npm (`package-lock.json` v2/v3) today. pnpm and yarn lockfiles, then PyPI, are planned. For pnpm/yarn projects you can generate an npm lockfile just for the scan:
+For pnpm/Yarn projects, generate an npm lockfile just for the scan:
 
 ```bash
 npm install --package-lock-only --ignore-scripts

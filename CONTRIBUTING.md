@@ -9,11 +9,14 @@ knowledge needed. The whole dataset lives in [`data/successors/`](data/successor
 1. **Fork** this repository.
 2. **Copy the commented example** from [`data/successors/SCHEMA.md`](data/successors/SCHEMA.md)
    into a new file named after the dead package, e.g. `data/successors/left-pad.yaml`.
-3. **Fill it in with real, checkable evidence.** Good evidence:
+3. **Set `ecosystem` explicitly** to the registry containing the dead package
+   (`npm` or `pypi` today; `go` and `crates` are reserved for planned support).
+   Package names can collide across registries, so this field is required.
+4. **Fill it in with real, checkable evidence.** Good evidence:
    - a maintainer's own deprecation notice or endorsement (link the issue/README)
    - a migration guide published by either project
    - concrete activity numbers with dates ("14 releases in the 12 months to 2026-07-11")
-4. **Validate locally** (optional but saves a round-trip):
+5. **Validate locally** (optional but saves a round-trip):
 
    ```bash
    pnpm install
@@ -21,7 +24,8 @@ knowledge needed. The whole dataset lives in [`data/successors/`](data/successor
    ```
 
    A malformed record fails with an error naming your file and the exact field.
-5. **Open a PR.** CI runs the same validation automatically.
+
+6. **Open a PR.** CI runs the same validation automatically.
 
 ### The evidence bar
 
@@ -35,8 +39,17 @@ didn't verify is worse than no number.
 
 A few specific rules:
 
-- `deprecatedSince` must be a date you can source (announcement post, npm flag
-  date). If you can't source it, use `null`.
+- `deprecatedSince` must be a date you can source (announcement post, registry
+  metadata date). If you can't source it, use `null`.
+- Distinguish an **explicit maintainer declaration** from inferred inactivity:
+  - For npm, quote the native `deprecated` message when one exists.
+  - For PyPI, record whether the package publishes the
+    `Development Status :: 7 - Inactive` classifier. This is PyPI's explicit
+    deprecation-equivalent signal and carries the same evidentiary weight as
+    npm's `deprecated` flag.
+  - If neither registry provides an explicit signal, say so. Cite release and
+    repository activity as inferred evidence; never describe staleness alone
+    as a formal deprecation.
 - Successor `evidence` needs at least one item that is an endorsement or
   adoption fact, not just "it's newer".
 - Don't add records for packages that are merely quiet. Stable and finished is

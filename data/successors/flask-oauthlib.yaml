@@ -1,0 +1,20 @@
+deadPackage: flask-oauthlib
+ecosystem: pypi
+# The README notice is undated; null per schema rules.
+deprecatedSince: null
+successors:
+  - name: Authlib
+    repoUrl: https://github.com/authlib/authlib
+    type: official-successor
+    migrationEffort: rewrite-required
+    evidence:
+      - "Flask-OAuthlib's README opens with a notice: \"You SHOULD use https://github.com/lepture/authlib instead\" — and its GitHub repository description reads \"YOU SHOULD USE https://github.com/lepture/authlib\""
+      - Authlib is written by the same maintainer (lepture), making this an author-designated successor, not a competing fork
+      - "Flask-OAuthlib's last release is 0.9.6, uploaded 2020-09-07, still marked \"Development Status :: 4 - Beta\" on PyPI"
+      - Authlib shipped 15 releases in the 12 months to 2026-07-14; latest 1.7.2 uploaded 2026-05-06; repository active as of 2026-06-19
+    lastVerified: 2026-07-14
+notes: >-
+  Authlib restructures the API (framework integrations for Flask/Django plus
+  low-level JOSE/OAuth building blocks), so migration is a rework of the
+  OAuth integration layer rather than an import swap — hence
+  rewrite-required despite the clear endorsement.

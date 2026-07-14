@@ -3,11 +3,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { performScan, type ScanClients } from '../src/commands/scan.js';
 import type { GitHubRepoActivity } from '../src/lib/github-client.js';
 import type { NpmPackageMetadata } from '../src/lib/npm-registry-client.js';
+import type { PypiPackageMetadata } from '../src/lib/pypi-registry-client.js';
 import { formatReport } from '../src/lib/report.js';
 import type { SuccessorRecord } from '../src/types.js';
 
 const AS_OF = new Date('2026-07-11T12:00:00.000Z');
 const fixturesDir = fileURLToPath(new URL('./fixtures/npm-project', import.meta.url));
+const pythonFixturesDir = fileURLToPath(new URL('./fixtures/python-project', import.meta.url));
 
 function monthsAgo(months: number): Date {
   return new Date(AS_OF.getTime() - months * 30.4375 * 24 * 60 * 60 * 1000);
@@ -21,6 +23,20 @@ function npmMeta(name: string, overrides: Partial<NpmPackageMetadata> = {}): Npm
     deprecated: null,
     repositoryUrl: `https://github.com/acme/${name}`,
     ownerRepo: `acme/${name}`,
+    ...overrides,
+  };
+}
+
+function pypiMeta(name: string, overrides: Partial<PypiPackageMetadata> = {}): PypiPackageMetadata {
+  return {
+    name,
+    latestVersion: '1.0.0',
+    lastModified: monthsAgo(1),
+    deprecated: null,
+    explicitDeprecationSignal: false,
+    repositoryUrl: `https://github.com/python/${name}`,
+    ownerRepo: `python/${name}`,
+    classifiers: [],
     ...overrides,
   };
 }
@@ -133,6 +149,35 @@ describe('performScan', () => {
         expect(entry.verdict.signals.length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it('scans a requirements.txt project through the PyPI registry client', async () => {
+    const clients = createMockClients();
+    clients.getPackageMetadata = vi.fn(async () => {
+      throw new Error('npm client should not be called for PyPI dependencies');
+    });
+    clients.getPypiPackageMetadata = vi.fn(async (name: string) =>
+      pypiMeta(name, {
+        deprecated:
+          name === 'requests' ? 'Development Status :: 7 - Inactive' : null,
+        explicitDeprecationSignal: name === 'requests',
+      }),
+    );
+
+    const result = await performScan({ cwd: pythonFixturesDir }, clients);
+
+    expect(result.summary.total).toBe(6);
+    expect(result.summary.likelyAbandoned).toBe(1);
+    expect(clients.getPackageMetadata).not.toHaveBeenCalled();
+    expect(clients.getPypiPackageMetadata).toHaveBeenCalledTimes(6);
+    expect(result.entries.every((entry) => entry.verdict.dependency.ecosystem === 'pypi')).toBe(
+      true,
+    );
+
+    const json = JSON.parse(JSON.stringify(result)) as {
+      entries: Array<{ verdict: { dependency: { ecosystem: string } } }>;
+    };
+    expect(json.entries[0]?.verdict.dependency.ecosystem).toBe('pypi');
   });
 
   it('skips transitive dependencies with directOnly', async () => {

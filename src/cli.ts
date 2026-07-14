@@ -7,7 +7,7 @@ const program = new Command();
 program
   .name('graveyard-check')
   .description('Find maintained successors for abandoned dependencies')
-  .version('0.1.0');
+  .version('0.2.0');
 
 registerScanCommand(program);
 registerCheckCommand(program);

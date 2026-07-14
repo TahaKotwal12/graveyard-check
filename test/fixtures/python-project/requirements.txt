@@ -1,0 +1,7 @@
+# Production dependencies
+
+requests==2.31.0
+django>=4.2,<5.0 # supported Django range
+uvicorn[standard]==0.30.1
+importlib-metadata==7.0.0; python_version < "3.10"
+-r requirements-extra.txt

@@ -1,0 +1,30 @@
+deadPackage: distutils
+ecosystem: pypi
+# Python 3.10 (released 2021-10-04) is when `import distutils` began raising
+# a DeprecationWarning per PEP 632.
+deprecatedSince: 2021-10-04
+successors:
+  - name: setuptools
+    repoUrl: https://github.com/pypa/setuptools
+    type: official-successor
+    migrationEffort: minor-changes
+    evidence:
+      - "PEP 632's migration advice names setuptools as the substitute for most distutils modules; the Python 3.12 release notes state: \"The third-party Setuptools package continues to provide distutils, if you still require it in Python 3.12 and beyond.\""
+      - distutils.core.setup and distutils.core.Extension map directly to setuptools.setup and setuptools.Extension
+      - 8 setuptools releases in the 12 months to 2026-07-14; latest 83.0.0 uploaded 2026-07-04; repository active as of 2026-07-12
+    lastVerified: 2026-07-14
+  - name: hatchling
+    repoUrl: https://github.com/pypa/hatch
+    type: different-approach
+    migrationEffort: rewrite-required
+    evidence:
+      - PyPA-maintained modern build backend (PEP 517/621 pyproject.toml) for projects replacing setup.py entirely rather than porting it
+      - 5 releases in the 12 months to 2026-07-14; latest 1.31.0 uploaded 2026-07-08; repository active as of 2026-07-08
+    lastVerified: 2026-07-14
+notes: >-
+  This is a packaging-tooling case, not a normal runtime dependency. distutils
+  was Python standard-library code, deprecated by PEP 632 in Python 3.10 and
+  removed in Python 3.12 (docs.python.org/3/library/distutils.html). The
+  "distutils" name on PyPI is only an ancient 1.0 placeholder upload. Code
+  that imports distutils should move to setuptools (near mechanical) or adopt
+  a modern PEP 517 build backend such as hatchling (project restructure).
