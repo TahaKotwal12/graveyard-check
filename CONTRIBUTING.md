@@ -1,5 +1,8 @@
 # Contributing to Graveyard Check
 
+By participating in this project, you agree to follow our
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
 The most valuable contribution you can make is a **successor record**: a small
 YAML file mapping a dead package to its verified replacement. No TypeScript
 knowledge needed. The whole dataset lives in [`data/successors/`](data/successors/).
