@@ -14,6 +14,7 @@ import {
   Workflow,
 } from 'lucide-react';
 import { useState } from 'react';
+import { Checker } from './components/Checker';
 import { GithubIcon } from './components/GithubIcon';
 import { Reveal } from './components/Reveal';
 import { CodeBlock, Terminal } from './components/Terminal';
@@ -21,6 +22,7 @@ import { CodeBlock, Terminal } from './components/Terminal';
 const GITHUB_URL = 'https://github.com/TahaKotwal12/graveyard-check';
 
 const NAV_LINKS = [
+  { href: '#try', label: 'Try it' },
   { href: '#features', label: 'Features' },
   { href: '#ecosystems', label: 'Ecosystems' },
   { href: '#verdicts', label: 'How it works' },
@@ -328,6 +330,20 @@ export default function App() {
               {'\n'}
               <span className="terminal-cursor text-orange-400">▋</span>
             </Terminal>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Try it in the browser */}
+      <section id="try" className="py-24">
+        <div className="mx-auto max-w-6xl px-4">
+          <SectionHeading
+            eyebrow="Try it now"
+            title="Check any package — right here, no install"
+            sub="Type an npm or PyPI package name. The verdict, evidence, and verified successors come straight from the live registries and the real dataset."
+          />
+          <Reveal>
+            <Checker />
           </Reveal>
         </div>
       </section>
