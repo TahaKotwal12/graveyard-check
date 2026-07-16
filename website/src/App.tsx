@@ -364,7 +364,7 @@ export default function App() {
                   <feature.icon className="mb-4 h-6 w-6 text-orange-400" />
                   <h3 className="mb-2 font-semibold text-white">{feature.title}</h3>
                   <p className="text-sm leading-relaxed text-slate-400">{feature.body}</p>
-                </div>
+                </div> 
               </Reveal>
             ))}
           </div>
