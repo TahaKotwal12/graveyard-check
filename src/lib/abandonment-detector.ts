@@ -1,8 +1,4 @@
-import type {
-  AbandonmentSignal,
-  AbandonmentVerdict,
-  Dependency,
-} from '../types.js';
+import type { AbandonmentSignal, AbandonmentVerdict, Dependency } from '../types.js';
 
 /**
  * Ecosystem-agnostic registry metadata consumed by the detector.

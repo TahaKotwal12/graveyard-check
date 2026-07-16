@@ -1,8 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  clearGitHubClientCache,
-  fetchRepoActivity,
-} from '../src/lib/github-client.js';
+import { clearGitHubClientCache, fetchRepoActivity } from '../src/lib/github-client.js';
 
 function jsonResponse(body: unknown, init: ResponseInit = {}): Response {
   const headers = new Headers(init.headers);

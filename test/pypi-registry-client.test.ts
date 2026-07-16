@@ -1,9 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { detectAbandonment } from '../src/lib/abandonment-detector.js';
-import {
-  clearPypiRegistryCache,
-  getPackageMetadata,
-} from '../src/lib/pypi-registry-client.js';
+import { clearPypiRegistryCache, getPackageMetadata } from '../src/lib/pypi-registry-client.js';
 
 function jsonResponse(body: unknown, init: ResponseInit = {}): Response {
   const headers = new Headers(init.headers);
@@ -104,8 +101,7 @@ describe('getPackageMetadata', () => {
       expect.objectContaining({
         type: 'deprecated-flag',
         severity: 'critical',
-        description:
-          'Package marked inactive on PyPI: Development Status :: 7 - Inactive',
+        description: 'Package marked inactive on PyPI: Development Status :: 7 - Inactive',
       }),
     );
   });

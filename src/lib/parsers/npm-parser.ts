@@ -40,7 +40,10 @@ export function packageNameFromLockfilePath(lockfilePath: string): string | null
     if (slashIndex === -1) {
       return null;
     }
-    return remainder.slice(0, slashIndex + 1 + remainder.slice(slashIndex + 1).split('/')[0].length);
+    return remainder.slice(
+      0,
+      slashIndex + 1 + remainder.slice(slashIndex + 1).split('/')[0].length,
+    );
   }
 
   return remainder.split('/')[0];

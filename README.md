@@ -9,15 +9,18 @@ Dependabot tells you when there's a new version. Nothing tells you when there wi
 
 ## Supported ecosystems
 
-| Ecosystem   | Input                     | Status           |
-| ----------- | ------------------------- | ---------------- |
-| npm         | `package-lock.json` v2/v3 | ✅ Supported     |
-| PyPI        | `requirements.txt`        | ✅ New in v0.2.0 |
-| Go modules  | `go.mod`                  | Planned          |
-| Rust crates | `Cargo.lock`              | Planned          |
+| Ecosystem   | Input                         | Status           |
+| ----------- | ----------------------------- | ---------------- |
+| npm         | `package-lock.json` v2/v3     | ✅ Supported     |
+| npm (pnpm)  | `pnpm-lock.yaml` v6/v9        | ✅ New in v0.3.0 |
+| npm (Yarn)  | `yarn.lock` (classic + Berry) | ✅ New in v0.3.0 |
+| PyPI        | `requirements.txt`            | ✅ Supported     |
+| Go modules  | `go.mod`                      | Planned          |
+| Rust crates | `Cargo.lock`                  | Planned          |
 
-`poetry.lock` and `Pipfile.lock` are detected but not parsed yet. pnpm and Yarn
-lockfiles are also planned.
+`poetry.lock` and `Pipfile.lock` are detected but not parsed yet. When multiple
+JS lockfiles exist, detection prefers `package-lock.json`, then
+`pnpm-lock.yaml`, then `yarn.lock`.
 
 ## Usage
 
@@ -72,7 +75,7 @@ Recommended successors:
 | `--verbose`               | `scan`  | Include the count of packages with insufficient data       |
 | `--ecosystem <npm\|pypi>` | `check` | Registry containing the package (default: `npm`)           |
 
-When a project contains both `package-lock.json` and `requirements.txt`, npm is
+When a project contains both a JS lockfile and `requirements.txt`, npm is
 scanned by default. Run a second scan with `--ecosystem pypi` for Python:
 
 ```bash
@@ -113,13 +116,15 @@ Recommendations come from a public, reviewable dataset of YAML records in [`data
 
 **This is the easiest and most valuable way to contribute.** Know the de-facto successor of a dead package? Add a record: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [record schema](data/successors/SCHEMA.md).
 
-## Other JavaScript package managers
+## Notes on pnpm and Yarn support
 
-For pnpm/Yarn projects, generate an npm lockfile just for the scan:
-
-```bash
-npm install --package-lock-only --ignore-scripts
-```
+- pnpm: lockfile format v6 (pnpm 8) and v9 (pnpm 9/10) are supported. Direct
+  dependencies are classified from the lockfile's importer sections; pnpm v9
+  removed per-package dev flags, so transitive dev classification is
+  best-effort there.
+- Yarn: both classic (v1) and Berry (v2+) lockfiles are supported. Yarn
+  lockfiles carry no dev information, so direct/dev classification comes from
+  `package.json`; transitive dependencies are reported as non-dev.
 
 ## License
 

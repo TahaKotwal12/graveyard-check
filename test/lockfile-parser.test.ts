@@ -18,9 +18,9 @@ describe('packageNameFromLockfilePath', () => {
     expect(packageNameFromLockfilePath('node_modules/lodash')).toBe('lodash');
     expect(packageNameFromLockfilePath('node_modules/@babel/core')).toBe('@babel/core');
     expect(packageNameFromLockfilePath('node_modules/debug/node_modules/ms')).toBe('ms');
-    expect(packageNameFromLockfilePath('node_modules/@babel/core/node_modules/@babel/code-frame')).toBe(
-      '@babel/code-frame',
-    );
+    expect(
+      packageNameFromLockfilePath('node_modules/@babel/core/node_modules/@babel/code-frame'),
+    ).toBe('@babel/code-frame');
   });
 
   it('returns null for the lockfile root entry', () => {

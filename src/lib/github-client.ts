@@ -164,10 +164,7 @@ function isRateLimited(response: Response, body: unknown): boolean {
   return message?.toLowerCase().includes('rate limit') ?? false;
 }
 
-async function fetchCommits(
-  owner: string,
-  repo: string,
-): Promise<{ lastCommitDate: Date }> {
+async function fetchCommits(owner: string, repo: string): Promise<{ lastCommitDate: Date }> {
   const url = `${GITHUB_API_BASE}/repos/${owner}/${repo}/commits?per_page=1`;
   const response = await githubFetch(url);
   const body = await parseJsonResponse<GitHubCommitResponse[] | GitHubErrorResponse>(response);

@@ -1,0 +1,10 @@
+{
+  "name": "yarn-berry-fixture",
+  "version": "1.0.0",
+  "dependencies": {
+    "debug": "^4.3.7"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3"
+  }
+}

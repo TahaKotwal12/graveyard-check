@@ -1,0 +1,54 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+  .:
+    dependencies:
+      debug:
+        specifier: ^4.3.7
+        version: 4.3.7(supports-color@8.1.1)
+      '@babel/code-frame':
+        specifier: ^7.24.7
+        version: 7.24.7
+    devDependencies:
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+
+packages:
+  '@babel/code-frame@7.24.7':
+    resolution: { integrity: sha512-fixture0 }
+
+  debug@4.3.7(supports-color@8.1.1):
+    resolution: { integrity: sha512-fixture1 }
+    engines: { node: '>=6.0' }
+
+  ms@2.1.3:
+    resolution: { integrity: sha512-fixture2 }
+
+  prettier@3.3.3:
+    resolution: { integrity: sha512-fixture3 }
+    engines: { node: '>=14' }
+    hasBin: true
+
+  supports-color@8.1.1:
+    resolution: { integrity: sha512-fixture4 }
+    engines: { node: '>=10' }
+
+snapshots:
+  '@babel/code-frame@7.24.7': {}
+
+  debug@4.3.7(supports-color@8.1.1):
+    dependencies:
+      ms: 2.1.3
+    optionalDependencies:
+      supports-color: 8.1.1
+
+  ms@2.1.3: {}
+
+  prettier@3.3.3: {}
+
+  supports-color@8.1.1: {}

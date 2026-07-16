@@ -78,7 +78,7 @@ const FEATURES = [
   {
     icon: Boxes,
     title: 'npm + PyPI in one CLI',
-    body: 'New in v0.2.0 — scan package-lock.json or requirements.txt with the same command. PyPI\u2019s "Development Status :: 7 - Inactive" classifier is treated with the same weight as npm\u2019s deprecated flag.',
+    body: 'Scan package-lock.json, pnpm-lock.yaml, yarn.lock, or requirements.txt with the same command. PyPI\u2019s "Development Status :: 7 - Inactive" classifier is treated with the same weight as npm\u2019s deprecated flag.',
   },
   {
     icon: ShieldCheck,
@@ -120,10 +120,11 @@ const FEATURES = [
 const ECOSYSTEMS = [
   {
     name: 'npm',
-    input: 'package-lock.json v2/v3',
+    input: 'package-lock.json · pnpm-lock.yaml · yarn.lock',
     status: 'Supported',
     live: true,
-    detail: 'Direct and transitive dependencies, dev-dependency awareness, npm deprecation flags.',
+    detail:
+      'npm v2/v3, pnpm v6/v9, and Yarn classic + Berry lockfiles. Direct and transitive dependencies, dev-dependency awareness, npm deprecation flags.',
   },
   {
     name: 'PyPI',
@@ -223,7 +224,7 @@ const FAQS = [
   },
   {
     q: 'Do you support pnpm or yarn lockfiles?',
-    a: 'Not yet — npm package-lock.json (v2/v3) today, pnpm and yarn next. Meanwhile, generate an npm lockfile just for the scan: npm install --package-lock-only --ignore-scripts.',
+    a: 'Yes, since v0.3.0 — pnpm-lock.yaml (format v6 and v9) and yarn.lock (both classic v1 and Berry). One nuance: yarn lockfiles carry no dev/prod info, so dev classification for transitive dependencies comes from package.json and is best-effort. bun.lock is next.',
   },
   {
     q: 'Why do I need a GITHUB_TOKEN?',
@@ -274,7 +275,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-24 text-center">
           <Reveal>
             <p className="mx-auto mb-6 w-fit rounded-full border border-orange-400/30 bg-orange-400/10 px-4 py-1.5 font-mono text-xs text-orange-300">
-              v0.2.0 · open source · MIT licensed · npm + PyPI
+              v0.3.0 · open source · MIT licensed · npm + pnpm + yarn + PyPI
             </p>
           </Reveal>
           <Reveal delay={100}>
@@ -376,7 +377,7 @@ export default function App() {
           <SectionHeading
             eyebrow="Ecosystems"
             title="Two ecosystems today. More on the roadmap."
-            sub="v0.2.0 adds full PyPI support alongside npm — same detector, same evidence bar, same successor dataset."
+            sub="v0.3.0 adds pnpm and Yarn lockfiles on top of npm and PyPI — same detector, same evidence bar, same successor dataset."
           />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {ECOSYSTEMS.map((eco, i) => (
@@ -428,7 +429,7 @@ export default function App() {
           </Reveal>
           <Reveal delay={280}>
             <p className="mx-auto mt-6 max-w-2xl text-center text-sm text-slate-500">
-              Projects with both a <code className="text-orange-300">package-lock.json</code> and a{' '}
+              Projects with both a JS lockfile and a{' '}
               <code className="text-orange-300">requirements.txt</code> scan npm by default — run
               again with <code className="text-orange-300">--ecosystem pypi</code> for Python.
             </p>
@@ -493,7 +494,9 @@ export default function App() {
                 graveyard-check scan
               </h3>
               <p className="mb-4 text-sm text-slate-400">
-                Parses <code className="text-orange-300">package-lock.json</code> or{' '}
+                Parses <code className="text-orange-300">package-lock.json</code>,{' '}
+                <code className="text-orange-300">pnpm-lock.yaml</code>,{' '}
+                <code className="text-orange-300">yarn.lock</code>, or{' '}
                 <code className="text-orange-300">requirements.txt</code>, checks every dependency
                 against its registry and GitHub, and prints flagged packages with successor
                 recommendations.
@@ -739,7 +742,7 @@ export default function App() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-slate-500 sm:flex-row">
           <div className="flex items-center gap-2">
             <LifeBuoy className="h-4 w-4 text-orange-400" />
-            <span>Graveyard Check v0.2.0 — MIT licensed open source</span>
+            <span>Graveyard Check v0.3.0 — MIT licensed open source</span>
           </div>
           <div className="flex items-center gap-6">
             <a href={GITHUB_URL} className="nav-link transition hover:text-white">

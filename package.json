@@ -1,6 +1,6 @@
 {
   "name": "graveyard-check",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Graveyard Check — find maintained successors for abandoned dependencies",
   "type": "module",
   "bin": {

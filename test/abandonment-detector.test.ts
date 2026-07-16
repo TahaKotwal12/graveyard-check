@@ -120,11 +120,7 @@ describe('detectAbandonment', () => {
   });
 
   it('returns insufficient-data when the GitHub repository could not be found', () => {
-    const verdict = detectAbandonment(
-      baseDependency,
-      npmMeta({ ownerRepo: 'acme/missing' }),
-      null,
-    );
+    const verdict = detectAbandonment(baseDependency, npmMeta({ ownerRepo: 'acme/missing' }), null);
 
     expect(verdict.confidence).toBe('insufficient-data');
     expect(verdict.signals[0]?.description).toContain('acme/missing');

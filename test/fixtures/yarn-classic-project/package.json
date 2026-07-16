@@ -1,0 +1,10 @@
+{
+  "name": "yarn-classic-fixture",
+  "version": "1.0.0",
+  "dependencies": {
+    "debug": "^4.3.0"
+  },
+  "devDependencies": {
+    "@babel/code-frame": "^7.0.0"
+  }
+}

@@ -16,11 +16,7 @@ import {
   type PypiPackageMetadata,
 } from '../lib/pypi-registry-client.js';
 import { findSuccessors, loadSuccessorGraph } from '../lib/successor-graph.js';
-import type {
-  AbandonmentVerdict,
-  SuccessorCandidate,
-  SuccessorRecord,
-} from '../types.js';
+import type { AbandonmentVerdict, SuccessorCandidate, SuccessorRecord } from '../types.js';
 
 export interface CheckClients {
   getPackageMetadata(name: string): Promise<NpmPackageMetadata | null>;

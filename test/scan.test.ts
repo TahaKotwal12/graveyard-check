@@ -127,9 +127,7 @@ describe('performScan', () => {
       withKnownSuccessors: 1,
     });
 
-    const byName = new Map(
-      result.entries.map((entry) => [entry.verdict.dependency.name, entry]),
-    );
+    const byName = new Map(result.entries.map((entry) => [entry.verdict.dependency.name, entry]));
 
     expect(byName.get('debug')?.verdict.confidence).toBe('maintained');
     expect(byName.get('ms')?.verdict.confidence).toBe('maintained');
@@ -158,8 +156,7 @@ describe('performScan', () => {
     });
     clients.getPypiPackageMetadata = vi.fn(async (name: string) =>
       pypiMeta(name, {
-        deprecated:
-          name === 'requests' ? 'Development Status :: 7 - Inactive' : null,
+        deprecated: name === 'requests' ? 'Development Status :: 7 - Inactive' : null,
         explicitDeprecationSignal: name === 'requests',
       }),
     );

@@ -79,9 +79,7 @@ export async function getPackageMetadata(name: string): Promise<NpmPackageMetada
     extractRepositoryUrl(latestVersionMetadata?.repository) ??
     extractRepositoryUrl(payload.repository);
   const deprecated =
-    typeof latestVersionMetadata?.deprecated === 'string'
-      ? latestVersionMetadata.deprecated
-      : null;
+    typeof latestVersionMetadata?.deprecated === 'string' ? latestVersionMetadata.deprecated : null;
 
   const metadata: NpmPackageMetadata = {
     name: payload.name,

@@ -73,10 +73,7 @@ export interface SuccessorCandidate {
   name: string;
   repoUrl: string;
   type:
-    | 'official-successor'
-    | 'community-fork'
-    | 'api-compatible-alternative'
-    | 'different-approach';
+    'official-successor' | 'community-fork' | 'api-compatible-alternative' | 'different-approach';
   migrationEffort: 'drop-in' | 'minor-changes' | 'rewrite-required';
   /** Human-readable bullets supporting why this successor is recommended. */
   evidence: string[];

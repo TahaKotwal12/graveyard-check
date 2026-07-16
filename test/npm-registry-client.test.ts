@@ -22,7 +22,9 @@ describe('parseRepositoryOwnerRepo', () => {
     expect(parseRepositoryOwnerRepo('git+https://github.com/request/request.git')).toBe(
       'request/request',
     );
-    expect(parseRepositoryOwnerRepo('git://github.com/sindresorhus/got.git')).toBe('sindresorhus/got');
+    expect(parseRepositoryOwnerRepo('git://github.com/sindresorhus/got.git')).toBe(
+      'sindresorhus/got',
+    );
     expect(parseRepositoryOwnerRepo('github:lodash/lodash')).toBe('lodash/lodash');
     expect(parseRepositoryOwnerRepo('git@github.com:visionmedia/debug.js.git')).toBe(
       'visionmedia/debug.js',

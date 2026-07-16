@@ -25,9 +25,7 @@ export function formatReport(result: ScanResult, options: ReportOptions = {}): s
 
   if (shown.length === 0) {
     lines.push(
-      chalk.green(
-        `All clear — none of the ${summary.total} scanned dependencies look abandoned.`,
-      ),
+      chalk.green(`All clear — none of the ${summary.total} scanned dependencies look abandoned.`),
     );
   } else {
     const headline = includeAtRisk

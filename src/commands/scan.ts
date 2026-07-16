@@ -203,7 +203,7 @@ export function registerScanCommand(program: Command): void {
     .option('--json', 'output the raw scan result as JSON (for CI/scripting)')
     .option(
       '--ecosystem <ecosystem>',
-      'scan "npm" or "pypi"; by default auto-detects package-lock.json first',
+      'scan "npm" or "pypi"; by default auto-detects JS lockfiles (package-lock.json, pnpm-lock.yaml, yarn.lock) first',
     )
     .option('--direct-only', 'skip transitive dependencies (much faster)')
     .option(
@@ -213,7 +213,8 @@ export function registerScanCommand(program: Command): void {
     .option('--verbose', 'include packages with insufficient data in the report')
     .addHelpText(
       'after',
-      '\nWhen both package-lock.json and requirements.txt exist, npm is scanned by default. ' +
+      '\nWhen both a JS lockfile (package-lock.json, pnpm-lock.yaml, or yarn.lock) and ' +
+        'requirements.txt exist, npm is scanned by default. ' +
         'Run again with --ecosystem pypi to scan Python dependencies.',
     )
     .action(async (options: ScanCliOptions) => {
