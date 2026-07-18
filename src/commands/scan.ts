@@ -6,6 +6,7 @@ import {
   type GitHubData,
   type RegistryMetadata,
 } from '../lib/abandonment-detector.js';
+import { isIgnored, loadGraveyardConfig } from '../lib/config.js';
 import { fetchRepoActivity, type GitHubRepoActivity } from '../lib/github-client.js';
 import { parseLockfile } from '../lib/lockfile-parser.js';
 import {
@@ -21,6 +22,7 @@ import { findSuccessors, loadSuccessorGraph } from '../lib/successor-graph.js';
 import type {
   AbandonmentVerdict,
   Dependency,
+  IgnoredDependency,
   ScanResult,
   ScanResultEntry,
   ScanResultSummary,
@@ -57,9 +59,26 @@ export async function performScan(
   clients: ScanClients = defaultClients,
 ): Promise<ScanResult> {
   const allDependencies = await parseLockfile(options.cwd, options.ecosystem);
-  const dependencies = options.directOnly
-    ? allDependencies.filter((dep) => dep.isDirect)
-    : allDependencies;
+  const config = await loadGraveyardConfig(options.cwd);
+
+  const ignored: IgnoredDependency[] = [];
+  const dependencies: Dependency[] = [];
+  for (const dep of allDependencies) {
+    if (options.directOnly && !dep.isDirect) {
+      continue;
+    }
+
+    const ignoreEntry = isIgnored(dep, config);
+    if (ignoreEntry) {
+      ignored.push({
+        name: dep.name,
+        ecosystem: dep.ecosystem,
+        reason: ignoreEntry.reason ?? null,
+      });
+    } else {
+      dependencies.push(dep);
+    }
+  }
 
   const graph = await clients.loadSuccessorGraph();
   const limit = pLimit(options.concurrency ?? DEFAULT_CONCURRENCY);
@@ -79,7 +98,8 @@ export async function performScan(
   return {
     scannedAt: new Date().toISOString(),
     entries,
-    summary: summarize(entries),
+    ignored,
+    summary: summarize(entries, ignored.length),
   };
 }
 
@@ -154,7 +174,7 @@ async function getRegistryMetadata(
   return clients.getPackageMetadata(dep.name);
 }
 
-function summarize(entries: ScanResultEntry[]): ScanResultSummary {
+function summarize(entries: ScanResultEntry[], ignoredCount: number): ScanResultSummary {
   const summary: ScanResultSummary = {
     total: entries.length,
     maintained: 0,
@@ -162,6 +182,7 @@ function summarize(entries: ScanResultEntry[]): ScanResultSummary {
     likelyAbandoned: 0,
     insufficientData: 0,
     withKnownSuccessors: 0,
+    ignored: ignoredCount,
   };
 
   for (const entry of entries) {
@@ -214,8 +235,10 @@ export function registerScanCommand(program: Command): void {
     .addHelpText(
       'after',
       '\nWhen both a JS lockfile (package-lock.json, pnpm-lock.yaml, or yarn.lock) and ' +
-        'requirements.txt exist, npm is scanned by default. ' +
-        'Run again with --ecosystem pypi to scan Python dependencies.',
+        'a Python dependency file (requirements.txt, uv.lock, or poetry.lock) exist, npm is ' +
+        'scanned by default. Run again with --ecosystem pypi to scan Python dependencies.' +
+        '\n\nKnown findings can be acknowledged in a .graveyardrc file so they stop failing CI:' +
+        '\n  { "ignore": ["moment", { "name": "nose", "ecosystem": "pypi", "reason": "migration planned" }] }',
     )
     .action(async (options: ScanCliOptions) => {
       if (options.severity && !['at-risk', 'likely-abandoned'].includes(options.severity)) {

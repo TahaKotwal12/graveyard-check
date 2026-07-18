@@ -78,7 +78,7 @@ const FEATURES = [
   {
     icon: Boxes,
     title: 'npm + PyPI in one CLI',
-    body: 'Scan package-lock.json, pnpm-lock.yaml, yarn.lock, or requirements.txt with the same command. PyPI\u2019s "Development Status :: 7 - Inactive" classifier is treated with the same weight as npm\u2019s deprecated flag.',
+    body: 'Scan package-lock.json, pnpm-lock.yaml, yarn.lock, requirements.txt, uv.lock, or poetry.lock with the same command. PyPI\u2019s "Development Status :: 7 - Inactive" classifier is treated with the same weight as npm\u2019s deprecated flag.',
   },
   {
     icon: ShieldCheck,
@@ -128,11 +128,11 @@ const ECOSYSTEMS = [
   },
   {
     name: 'PyPI',
-    input: 'requirements.txt',
-    status: 'New in v0.2.0',
+    input: 'requirements.txt · uv.lock · poetry.lock',
+    status: 'New in v0.4.0',
     live: true,
     detail:
-      'Pins, ranges, extras, environment markers, and recursive -r includes. Inactive classifier detected as an explicit deprecation signal.',
+      'requirements.txt, uv, and Poetry (1.x + 2.x) lockfiles. Inactive classifier detected as an explicit deprecation signal.',
   },
   {
     name: 'Go modules',
@@ -216,7 +216,7 @@ const FAQS = [
   },
   {
     q: 'Does it support Python?',
-    a: 'Yes, since v0.2.0. Scans parse requirements.txt (pins, ranges, extras, environment markers, recursive -r includes) and check dependencies against PyPI. poetry.lock and Pipfile.lock are detected but not parsed yet — you get a clear error instead of a misparse. Use --ecosystem pypi when a project also has a package-lock.json.',
+    a: 'Yes. Scans parse requirements.txt, uv.lock (new in v0.4.0), and poetry.lock (Poetry 1.x and 2.x, also new in v0.4.0), checking dependencies against PyPI. Pipfile.lock is detected but not parsed yet — you get a clear error instead of a misparse. Use --ecosystem pypi when a project also has a JS lockfile.',
   },
   {
     q: 'What about false positives?',
@@ -275,7 +275,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-24 text-center">
           <Reveal>
             <p className="mx-auto mb-6 w-fit rounded-full border border-orange-400/30 bg-orange-400/10 px-4 py-1.5 font-mono text-xs text-orange-300">
-              v0.3.0 · open source · MIT licensed · npm + pnpm + yarn + PyPI
+              v0.4.0 · open source · MIT licensed · npm + pnpm + yarn + PyPI + uv + Poetry
             </p>
           </Reveal>
           <Reveal delay={100}>
@@ -364,7 +364,7 @@ export default function App() {
                   <feature.icon className="mb-4 h-6 w-6 text-orange-400" />
                   <h3 className="mb-2 font-semibold text-white">{feature.title}</h3>
                   <p className="text-sm leading-relaxed text-slate-400">{feature.body}</p>
-                </div> 
+                </div>
               </Reveal>
             ))}
           </div>
@@ -377,7 +377,7 @@ export default function App() {
           <SectionHeading
             eyebrow="Ecosystems"
             title="Two ecosystems today. More on the roadmap."
-            sub="v0.3.0 adds pnpm and Yarn lockfiles on top of npm and PyPI — same detector, same evidence bar, same successor dataset."
+            sub="v0.4.0 completes the Python story with uv and Poetry lockfiles — same detector, same evidence bar, same successor dataset."
           />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {ECOSYSTEMS.map((eco, i) => (
@@ -496,10 +496,14 @@ export default function App() {
               <p className="mb-4 text-sm text-slate-400">
                 Parses <code className="text-orange-300">package-lock.json</code>,{' '}
                 <code className="text-orange-300">pnpm-lock.yaml</code>,{' '}
-                <code className="text-orange-300">yarn.lock</code>, or{' '}
-                <code className="text-orange-300">requirements.txt</code>, checks every dependency
+                <code className="text-orange-300">yarn.lock</code>,{' '}
+                <code className="text-orange-300">requirements.txt</code>,{' '}
+                <code className="text-orange-300">uv.lock</code>, or{' '}
+                <code className="text-orange-300">poetry.lock</code>, checks every dependency
                 against its registry and GitHub, and prints flagged packages with successor
-                recommendations.
+                recommendations. Known findings can be acknowledged in a{' '}
+                <code className="text-orange-300">.graveyardrc</code> ignore list so CI stays green
+                while you migrate.
               </p>
               <CodeBlock title="flags">
                 {'--json               structured output for CI/scripting\n'}
@@ -742,7 +746,7 @@ export default function App() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-slate-500 sm:flex-row">
           <div className="flex items-center gap-2">
             <LifeBuoy className="h-4 w-4 text-orange-400" />
-            <span>Graveyard Check v0.3.0 — MIT licensed open source</span>
+            <span>Graveyard Check v0.4.0 — MIT licensed open source</span>
           </div>
           <div className="flex items-center gap-6">
             <a href={GITHUB_URL} className="nav-link transition hover:text-white">

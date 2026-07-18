@@ -9,18 +9,21 @@ Dependabot tells you when there's a new version. Nothing tells you when there wi
 
 ## Supported ecosystems
 
-| Ecosystem   | Input                         | Status           |
-| ----------- | ----------------------------- | ---------------- |
-| npm         | `package-lock.json` v2/v3     | ✅ Supported     |
-| npm (pnpm)  | `pnpm-lock.yaml` v6/v9        | ✅ New in v0.3.0 |
-| npm (Yarn)  | `yarn.lock` (classic + Berry) | ✅ New in v0.3.0 |
-| PyPI        | `requirements.txt`            | ✅ Supported     |
-| Go modules  | `go.mod`                      | Planned          |
-| Rust crates | `Cargo.lock`                  | Planned          |
+| Ecosystem     | Input                         | Status           |
+| ------------- | ----------------------------- | ---------------- |
+| npm           | `package-lock.json` v2/v3     | ✅ Supported     |
+| npm (pnpm)    | `pnpm-lock.yaml` v6/v9        | ✅ Supported     |
+| npm (Yarn)    | `yarn.lock` (classic + Berry) | ✅ Supported     |
+| PyPI          | `requirements.txt`            | ✅ Supported     |
+| PyPI (uv)     | `uv.lock`                     | ✅ New in v0.4.0 |
+| PyPI (Poetry) | `poetry.lock` (1.x + 2.x)     | ✅ New in v0.4.0 |
+| Go modules    | `go.mod`                      | Planned          |
+| Rust crates   | `Cargo.lock`                  | Planned          |
 
-`poetry.lock` and `Pipfile.lock` are detected but not parsed yet. When multiple
-JS lockfiles exist, detection prefers `package-lock.json`, then
-`pnpm-lock.yaml`, then `yarn.lock`.
+`Pipfile.lock` is detected but not parsed yet. When multiple lockfiles exist,
+detection prefers JS lockfiles (`package-lock.json`, then `pnpm-lock.yaml`,
+then `yarn.lock`) and, within Python, `requirements.txt`, then `uv.lock`, then
+`poetry.lock`.
 
 ## Usage
 
@@ -86,6 +89,24 @@ npx graveyard-check scan --ecosystem pypi
 JSON output includes `ecosystem` on every dependency so reports from the two
 scans can be combined safely in CI. Terminal output stays intentionally compact.
 
+### Ignoring known findings
+
+Teams often know about a dead dependency long before they can migrate off it.
+Acknowledge it in a `.graveyardrc` (or `.graveyardrc.json`) file at the project
+root so scans stop flagging it and CI stays green:
+
+```json
+{
+  "ignore": ["moment", { "name": "nose", "ecosystem": "pypi", "reason": "migration planned Q3" }]
+}
+```
+
+Entries are matched case-insensitively (PyPI names also treat `-`, `_`, and
+`.` alike), and an optional `ecosystem` limits an entry to one registry.
+Ignored dependencies are listed in `--json` output under `ignored` (with their
+`reason`), and the terminal report shows an ignored count — acknowledged, not
+hidden. `graveyard-check check <pkg>` intentionally bypasses the ignore list.
+
 ### GitHub token (recommended)
 
 Graveyard Check queries the GitHub API for repository activity. Unauthenticated requests are limited to 60/hour, which a real scan will exhaust. Set a token (a fine-grained token with read-only public repository access is enough):
@@ -116,7 +137,7 @@ Recommendations come from a public, reviewable dataset of YAML records in [`data
 
 **This is the easiest and most valuable way to contribute.** Know the de-facto successor of a dead package? Add a record: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [record schema](data/successors/SCHEMA.md).
 
-## Notes on pnpm and Yarn support
+## Notes on lockfile support
 
 - pnpm: lockfile format v6 (pnpm 8) and v9 (pnpm 9/10) are supported. Direct
   dependencies are classified from the lockfile's importer sections; pnpm v9
@@ -125,6 +146,14 @@ Recommendations come from a public, reviewable dataset of YAML records in [`data
 - Yarn: both classic (v1) and Berry (v2+) lockfiles are supported. Yarn
   lockfiles carry no dev information, so direct/dev classification comes from
   `package.json`; transitive dependencies are reported as non-dev.
+- uv: `uv.lock` is self-contained — workspace roots and their dependency
+  groups live in the lockfile, so no `pyproject.toml` read is needed. Only
+  direct dev-group dependencies are classified as dev.
+- Poetry: `poetry.lock` from Poetry 1.x (`category` markers) and 2.x
+  (`groups` markers) is supported. `pyproject.toml` must sit next to the
+  lockfile for direct-dependency classification; Poetry-native sections,
+  PEP 621 `[project]` dependencies, and PEP 735 dependency groups are all
+  read.
 
 ## License
 

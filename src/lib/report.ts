@@ -56,6 +56,14 @@ export function formatReport(result: ScanResult, options: ReportOptions = {}): s
       `${chalk.red(`${summary.likelyAbandoned} likely abandoned`)}`,
   );
 
+  if (summary.ignored > 0) {
+    lines.push(
+      chalk.dim(
+        `${summary.ignored} dependenc${summary.ignored === 1 ? 'y' : 'ies'} ignored via .graveyardrc`,
+      ),
+    );
+  }
+
   return lines.join('\n');
 }
 

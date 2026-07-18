@@ -3,11 +3,13 @@ import { join } from 'node:path';
 import type { Dependency } from '../types.js';
 import { parseNpmLockfile } from './parsers/npm-parser.js';
 import { parsePnpmLockfile } from './parsers/pnpm-parser.js';
+import { parsePoetryLockfile } from './parsers/poetry-parser.js';
 import { parseRequirementsTxt } from './parsers/python-parser.js';
+import { parseUvLockfile } from './parsers/uv-parser.js';
 import { parseYarnLockfile } from './parsers/yarn-parser.js';
 
 export const NO_LOCKFILE_ERROR =
-  'No supported dependency file found. Expected package-lock.json, pnpm-lock.yaml, yarn.lock, or requirements.txt.';
+  'No supported dependency file found. Expected package-lock.json, pnpm-lock.yaml, yarn.lock, requirements.txt, uv.lock, or poetry.lock.';
 
 export type DetectedEcosystem = 'npm' | 'pypi' | 'unknown';
 
@@ -25,7 +27,7 @@ export async function detectEcosystem(cwd: string): Promise<DetectedEcosystem> {
     }
   }
 
-  for (const filename of ['requirements.txt', 'poetry.lock', 'Pipfile.lock']) {
+  for (const filename of ['requirements.txt', 'uv.lock', 'poetry.lock', 'Pipfile.lock']) {
     if (await fileExists(join(cwd, filename))) {
       return 'pypi';
     }
@@ -63,15 +65,21 @@ export async function parseLockfile(
       return parseRequirementsTxt(cwd);
     }
 
+    if (await fileExists(join(cwd, 'uv.lock'))) {
+      return parseUvLockfile(cwd);
+    }
+
     if (await fileExists(join(cwd, 'poetry.lock'))) {
-      throw unsupportedPythonLockfileError('poetry.lock');
+      return parsePoetryLockfile(cwd);
     }
 
     if (await fileExists(join(cwd, 'Pipfile.lock'))) {
       throw unsupportedPythonLockfileError('Pipfile.lock');
     }
 
-    throw new Error(`No requirements.txt found for requested PyPI ecosystem in ${cwd}.`);
+    throw new Error(
+      `No requirements.txt, uv.lock, or poetry.lock found for requested PyPI ecosystem in ${cwd}.`,
+    );
   }
 
   throw new Error(NO_LOCKFILE_ERROR);
@@ -89,7 +97,7 @@ async function fileExists(path: string): Promise<boolean> {
   }
 }
 
-function unsupportedPythonLockfileError(filename: 'poetry.lock' | 'Pipfile.lock'): Error {
+function unsupportedPythonLockfileError(filename: 'Pipfile.lock'): Error {
   return new Error(
     `Detected ${filename}, but parsing isn't implemented yet. ` +
       'See https://github.com/TahaKotwal12/graveyard-check/issues for Python lockfile support.',

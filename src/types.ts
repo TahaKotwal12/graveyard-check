@@ -106,6 +106,16 @@ export interface ScanResultEntry {
 }
 
 /**
+ * A dependency excluded from analysis by the project's `.graveyardrc` ignore list.
+ */
+export interface IgnoredDependency {
+  name: string;
+  ecosystem: Dependency['ecosystem'];
+  /** The reason recorded in the ignore entry, if any. */
+  reason: string | null;
+}
+
+/**
  * Aggregate counts for quick summary lines and `--json` consumers.
  */
 export interface ScanResultSummary {
@@ -116,6 +126,8 @@ export interface ScanResultSummary {
   insufficientData: number;
   /** Dependencies with at least one curated successor in the dataset. */
   withKnownSuccessors: number;
+  /** Dependencies skipped via the `.graveyardrc` ignore list. */
+  ignored: number;
 }
 
 /**
@@ -125,5 +137,7 @@ export interface ScanResult {
   /** ISO 8601 timestamp when the scan completed. */
   scannedAt: string;
   entries: ScanResultEntry[];
+  /** Dependencies excluded from analysis by the project's ignore list. */
+  ignored: IgnoredDependency[];
   summary: ScanResultSummary;
 }

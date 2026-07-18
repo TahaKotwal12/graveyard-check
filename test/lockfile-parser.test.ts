@@ -132,7 +132,7 @@ describe('parseLockfile', () => {
     }
   });
 
-  it.each(['poetry.lock', 'Pipfile.lock'] as const)(
+  it.each(['Pipfile.lock'] as const)(
     'reports detected but unsupported Python lockfile %s',
     async (filename) => {
       const pythonDir = await mkdtemp(join(tmpdir(), 'graveyard-check-python-lockfile-'));

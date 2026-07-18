@@ -1,0 +1,39 @@
+version = 1
+requires-python = ">=3.12"
+
+[[package]]
+name = "demo-app"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "requests" },
+    { name = "flask-script" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
+[[package]]
+name = "certifi"
+version = "2024.8.30"
+source = { registry = "https://pypi.org/simple" }
+
+[[package]]
+name = "flask-script"
+version = "2.0.6"
+source = { registry = "https://pypi.org/simple" }
+
+[[package]]
+name = "pytest"
+version = "8.3.3"
+source = { registry = "https://pypi.org/simple" }
+
+[[package]]
+name = "requests"
+version = "2.32.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+]

@@ -1,6 +1,6 @@
 {
   "name": "graveyard-check",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Graveyard Check — find maintained successors for abandoned dependencies",
   "type": "module",
   "bin": {
@@ -45,6 +45,7 @@
     "commander": "^13.1.0",
     "ora": "^9.4.1",
     "p-limit": "^7.3.0",
+    "smol-toml": "^1.7.0",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
   },

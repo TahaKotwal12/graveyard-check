@@ -1,3 +1,6 @@
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { performScan, type ScanClients } from '../src/commands/scan.js';
@@ -125,7 +128,9 @@ describe('performScan', () => {
       likelyAbandoned: 1,
       insufficientData: 1,
       withKnownSuccessors: 1,
+      ignored: 0,
     });
+    expect(result.ignored).toEqual([]);
 
     const byName = new Map(result.entries.map((entry) => [entry.verdict.dependency.name, entry]));
 
@@ -214,6 +219,57 @@ describe('performScan', () => {
     const result = await performScan({ cwd: fixturesDir }, createMockClients());
 
     expect(formatReport(result, { severity: 'likely-abandoned' })).toMatchSnapshot();
+  });
+
+  it('skips dependencies listed in .graveyardrc and reports them as ignored', async () => {
+    const projectDir = await mkdtemp(join(tmpdir(), 'graveyard-check-ignore-'));
+
+    try {
+      await writeFile(
+        join(projectDir, 'package.json'),
+        JSON.stringify({
+          name: 'ignore-fixture',
+          version: '1.0.0',
+          dependencies: { debug: '^4.3.7' },
+          devDependencies: { prettier: '^3.3.3' },
+        }),
+      );
+      await writeFile(
+        join(projectDir, 'package-lock.json'),
+        JSON.stringify({
+          name: 'ignore-fixture',
+          lockfileVersion: 3,
+          packages: {
+            '': { name: 'ignore-fixture', version: '1.0.0' },
+            'node_modules/debug': { version: '4.3.7' },
+            'node_modules/prettier': { version: '3.3.3', dev: true },
+          },
+        }),
+      );
+      await writeFile(
+        join(projectDir, '.graveyardrc'),
+        JSON.stringify({ ignore: [{ name: 'prettier', reason: 'migration planned Q3' }] }),
+      );
+
+      const clients = createMockClients();
+      const result = await performScan({ cwd: projectDir }, clients);
+
+      expect(result.ignored).toEqual([
+        { name: 'prettier', ecosystem: 'npm', reason: 'migration planned Q3' },
+      ]);
+      expect(result.summary.ignored).toBe(1);
+      expect(result.summary.total).toBe(1);
+      expect(result.summary.likelyAbandoned).toBe(0);
+      expect(result.entries.some((entry) => entry.verdict.dependency.name === 'prettier')).toBe(
+        false,
+      );
+      expect(clients.getPackageMetadata).toHaveBeenCalledTimes(1);
+
+      const report = formatReport(result);
+      expect(report).toContain('1 dependency ignored via .graveyardrc');
+    } finally {
+      await rm(projectDir, { recursive: true, force: true });
+    }
   });
 
   it('prints an encouraging line when nothing is abandoned', async () => {
